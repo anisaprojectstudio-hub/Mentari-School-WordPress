@@ -1,4 +1,9 @@
-<?php get_header(); ?>
+<?php
+/* Template: Home
+ * Slug WordPress: home
+ * Sumber: index.html
+ */
+get_header(); ?>
 
 <main id="main-content">
     <!-- ================= SECTION 1: HERO BANNER ================= -->
@@ -38,18 +43,38 @@
 
                     <h1 class="hero-tagline mb-4">
                         <?php
-                        echo wp_kses(
-                            get_theme_mod(
-                                'mentari_main_hero_title',
-                                'More than lessons.<br><span class="highlight-text">It’s life.</span>'
-                            ),
-                            array(
-                                'br' => array(),
-                                'span' => array(
-                                    'class' => array(),
-                                ),
-                            )
-                        );
+                        $hero_title_main = get_theme_mod('mentari_hero_title_main', null);
+                        $hero_title_highlight = get_theme_mod('mentari_hero_title_highlight', null);
+
+                        if (null === $hero_title_main && null === $hero_title_highlight) {
+                            $legacy_hero_title = get_theme_mod('mentari_main_hero_title', null);
+
+                            if (is_string($legacy_hero_title)) {
+                                $legacy_hero_title = mentari_sanitize_hero_title($legacy_hero_title);
+                                if (preg_match('/^(.*?)<br\s*\/?>\s*<span class="highlight-text">(.*?)<\/span>$/is', $legacy_hero_title, $matches)) {
+                                    $hero_title_main = wp_strip_all_tags($matches[1]);
+                                    $hero_title_highlight = wp_strip_all_tags($matches[2]);
+                                } else {
+                                    $hero_title_main = wp_strip_all_tags($legacy_hero_title);
+                                    $hero_title_highlight = '';
+                                }
+                            }
+                        }
+
+                        if (null === $hero_title_main) {
+                            $hero_title_main = 'More than lessons.';
+                        }
+                        if (null === $hero_title_highlight) {
+                            $hero_title_highlight = 'It’s life.';
+                        }
+
+                        echo esc_html($hero_title_main);
+                        if ('' !== $hero_title_highlight) {
+                            if ('' !== $hero_title_main) {
+                                echo '<br>';
+                            }
+                            echo '<span class="highlight-text">' . esc_html($hero_title_highlight) . '</span>';
+                        }
                         ?>
                     </h1>
 
@@ -267,7 +292,7 @@
                         <?php echo esc_html(get_theme_mod('mentari_purpose_paragraph_2', 'Curious about who we are and what we believe in? Let’s take you there.')); ?>
                     </p>
 
-                    <a href="<?php echo esc_url(get_theme_mod('mentari_purpose_button_url', 'mis-story.html')); ?>"
+                    <a href="<?php echo esc_url(mentari_resolve_url(get_theme_mod('mentari_purpose_button_url', 'mis-story.html'))); ?>"
                         class="btn btn-mis-primary btn-pill">
                         <?php echo esc_html(get_theme_mod('mentari_purpose_button_text', 'Learn More')); ?>
                         <i class="fa-solid fa-arrow-right ms-2"></i>
@@ -409,7 +434,7 @@
             'age' => 'Ages 2 - 5',
             'description' => 'Play-based, inquiry-driven learning nurturing natural curiosity and joyful discovery.',
             'image' => 'https://images.squarespace-cdn.com/content/v1/60c9a5215a821d628e0e1c65/1c0f3d35-d3ae-4cc5-9adc-18948a8b41a5/DSC08102.jpg',
-            'url' => '#admission',
+            'url' => mentari_page_url('early-years'),
             'button' => 'Explore Program',
             'delay' => 100,
             'column' => 'col-12 col-sm-6 col-lg-4',
@@ -419,7 +444,7 @@
             'age' => 'Grades 1 - 5',
             'description' => 'IB Primary Years Programme (PYP) inspiring critical thinking and international mindedness.',
             'image' => 'https://images.squarespace-cdn.com/content/v1/60c9a5215a821d628e0e1c65/5837a716-b51d-4b88-966d-863b64140333/Elementary+7.png',
-            'url' => '#admission',
+            'url' => mentari_page_url('elementary'),
             'button' => 'Explore Program',
             'delay' => 150,
             'column' => 'col-12 col-sm-6 col-lg-4',
@@ -429,7 +454,7 @@
             'age' => 'Grades 6 - 8',
             'description' => 'IB Middle Years Programme (MYP) developing academic mastery, empathy, and leadership.',
             'image' => 'https://images.squarespace-cdn.com/content/v1/60c9a5215a821d628e0e1c65/7530af28-f093-4e25-8353-e17589919861/School+Curricula+-+JHS+45_2.jpg',
-            'url' => '#admission',
+            'url' => mentari_page_url('middle-school'),
             'button' => 'Explore Program',
             'delay' => 200,
             'column' => 'col-12 col-sm-6 col-lg-4',
@@ -439,7 +464,7 @@
             'age' => 'Grades 9 - 12',
             'description' => 'Cambridge IGCSE and IB Diploma Programme (DP) preparing students for worldwide higher education success.',
             'image' => 'https://images.squarespace-cdn.com/content/v1/60c9a5215a821d628e0e1c65/1576ef94-cf1a-4ef4-86e4-2411b5967bb8/High+School+2.jpg',
-            'url' => '#admission',
+            'url' => mentari_page_url('high-school'),
             'button' => 'Explore Program',
             'delay' => 250,
             'column' => 'col-12 col-sm-6 col-lg-6',
@@ -546,7 +571,7 @@
             'location' => 'Bintaro Sektor 9',
             'description' => 'Comprehensive campus serving Early Childhood, Elementary, Middle School, and High School with state-of-the-art sports and arts facilities.',
             'image' => 'https://images.squarespace-cdn.com/content/v1/60c9a5215a821d628e0e1c65/7d1ed6cb-ede3-4e77-b77a-1b433961e04e/11.jpg',
-            'url' => '#contact-footer',
+            'url' => mentari_page_url('mis-bintaro'),
             'button' => 'Campus Details',
             'delay' => 100,
             'column' => 'col-lg-4 col-md-6',
@@ -556,7 +581,7 @@
             'location' => 'Cipete, South Jakarta',
             'description' => 'Our flagship international campus in Cipete, renowned for its strong community, academic rigor, and vibrant student life.',
             'image' => 'https://images.squarespace-cdn.com/content/v1/60c9a5215a821d628e0e1c65/55ef63c0-1f26-4ef8-aacc-43a4fe82b0c4/DJI_0855.JPG',
-            'url' => '#contact-footer',
+            'url' => mentari_page_url('mis-jakarta'),
             'button' => 'Campus Details',
             'delay' => 150,
             'column' => 'col-lg-4 col-md-6',
@@ -566,7 +591,7 @@
             'location' => 'West Jakarta',
             'description' => 'Purpose-built modern campus providing exceptional international curriculum and holistic development programs in West Jakarta.',
             'image' => 'https://images.squarespace-cdn.com/content/v1/60c9a5215a821d628e0e1c65/b9584050-a372-4b9f-95e7-2e57688e2f7f/DJI_0266.jpg',
-            'url' => '#contact-footer',
+            'url' => mentari_page_url('mis-grand-surya'),
             'button' => 'Campus Details',
             'delay' => 200,
             'column' => 'col-lg-4 col-md-6',
@@ -576,7 +601,7 @@
             'location' => 'Jakarta',
             'description' => 'Nurturing joyful discovery and developmental milestones for children in their most formative early years.',
             'image' => 'https://images.squarespace-cdn.com/content/v1/60c9a5215a821d628e0e1c65/c3d7a938-2ffe-460e-92a4-6a785a41fdb2/L1030398.jpg',
-            'url' => '#contact-footer',
+            'url' => mentari_page_url('mentari-preschool'),
             'button' => 'Campus Details',
             'delay' => 250,
             'column' => 'col-lg-6 col-md-6',
@@ -586,7 +611,7 @@
             'location' => 'Bintaro',
             'description' => 'A warm, homey, and stimulating space where little learners flourish through creative play and values-driven guidance.',
             'image' => 'https://images.squarespace-cdn.com/content/v1/60c9a5215a821d628e0e1c65/7bae7578-f323-4c61-952f-dc78f4ec141f/DSC01916-2.jpg',
-            'url' => '#contact-footer',
+            'url' => mentari_page_url('sunflower-preschool'),
             'button' => 'Campus Details',
             'delay' => 300,
             'column' => 'col-lg-6 col-md-12',
@@ -800,8 +825,6 @@
         </div>
     </section>
 
-
-
     <!-- ================= SECTION 10: CONNECT WITH US (INSTAGRAM FEED & LIGHTBOX) ================= -->
     <?php
     $instagram_url = get_theme_mod(
@@ -950,21 +973,21 @@
             <div class="row align-items-center g-4">
                 <div class="col-lg-8" data-aos="fade-right">
                     <span class="sub-label text-gold fw-bold text-uppercase tracking-wider d-block mb-2">
-                            <?php echo esc_html(get_theme_mod('mentari_admission_label', 'Enrollment Open')); ?>
+                        <?php echo esc_html(get_theme_mod('mentari_admission_label', 'Enrollment Open')); ?>
                     </span>
 
                     <h2 class="display-6 fw-bold text-white mb-3">
-                            <?php echo esc_html(get_theme_mod(
-                                'mentari_admission_title',
-                                "Begin Your Child's Journey at Mentari"
-                            )); ?>
+                        <?php echo esc_html(get_theme_mod(
+                            'mentari_admission_title',
+                            "Begin Your Child's Journey at Mentari"
+                        )); ?>
                     </h2>
 
                     <p class="text-white-50 fs-5 mb-0">
-                            <?php echo esc_html(get_theme_mod(
-                                'mentari_admission_description',
-                                'Admissions for Academic Year 2026/2027 are now open across all our campuses. Connect with our admissions counselors today.'
-                            )); ?>
+                        <?php echo esc_html(get_theme_mod(
+                            'mentari_admission_description',
+                            'Admissions for Academic Year 2026/2027 are now open across all our campuses. Connect with our admissions counselors today.'
+                        )); ?>
                     </p>
                 </div>
 
@@ -973,10 +996,10 @@
                         'mentari_admission_button_url',
                         '#contact-footer'
                     )); ?>" class="btn btn-gold btn-hero-pill px-4 py-3 fs-5">
-                            <?php echo esc_html(get_theme_mod(
-                                'mentari_admission_button_text',
-                                'Online Admission Form'
-                            )); ?>
+                        <?php echo esc_html(get_theme_mod(
+                            'mentari_admission_button_text',
+                            'Online Admission Form'
+                        )); ?>
                         <i class="fa-solid fa-paper-plane ms-2"></i>
                     </a>
                 </div>
@@ -985,6 +1008,93 @@
     </section>
 
 </main>
+
+<!-- ================= INSTAGRAM LIGHTBOX MODAL (CONNECT WITH US FEATURE) ================= -->
+<div class="modal fade ig-lightbox-modal" id="igLightboxModal" tabindex="-1" aria-labelledby="igLightboxLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
+        <div class="modal-content border-0 rounded-4 overflow-hidden bg-white shadow-2xl">
+            <div class="modal-body p-0">
+                <div class="row g-0 ig-modal-row">
+                    <!-- Left: Media Display (Image or Embedded Reel) -->
+                    <div
+                        class="col-lg-7 col-md-6 ig-modal-media-col bg-dark d-flex align-items-center justify-content-center position-relative">
+                        <div id="ig-modal-media-container"
+                            class="w-100 h-100 d-flex align-items-center justify-content-center p-2">
+                            <!-- Dynamic Media Injected by JS -->
+                        </div>
+                        <!-- Nav Arrows -->
+                        <button class="ig-nav-btn ig-prev-btn" id="ig-modal-prev" aria-label="Previous post">
+                            <i class="fa-solid fa-chevron-left"></i>
+                        </button>
+                        <button class="ig-nav-btn ig-next-btn" id="ig-modal-next" aria-label="Next post">
+                            <i class="fa-solid fa-chevron-right"></i>
+                        </button>
+                    </div>
+
+                    <!-- Right: Post Details & Comments Sidebar -->
+                    <div class="col-lg-5 col-md-6 ig-modal-sidebar d-flex flex-column bg-white">
+                        <!-- Header Profile -->
+                        <div
+                            class="ig-modal-header p-3 border-bottom d-flex align-items-center justify-content-between">
+                            <div class="d-flex align-items-center gap-2">
+                                <div class="ig-avatar-ring">
+                                    <div class="ig-avatar-inner">
+                                        <span class="fw-bold text-forest">MIS</span>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="fw-bold fs-6 d-flex align-items-center gap-1">
+                                        mis.sch.id <i class="fa-solid fa-circle-check text-primary small"
+                                            title="Verified"></i>
+                                    </div>
+                                    <small class="text-muted">Mentari Intercultural School</small>
+                                </div>
+                            </div>
+                            <button type="button" class="btn-close ms-auto" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                        </div>
+
+                        <!-- Scrollable Post Caption Body -->
+                        <div class="ig-modal-body p-3 flex-grow-1 overflow-auto" id="ig-modal-caption-container">
+                            <!-- Dynamic Caption Injected by JS -->
+                        </div>
+
+                        <!-- Action Bar & Footer -->
+                        <div class="ig-modal-footer p-3 border-top bg-light">
+                            <div class="d-flex align-items-center justify-content-between mb-2">
+                                <div class="d-flex align-items-center gap-3 fs-5">
+                                    <button class="btn p-0 border-0 text-danger ig-like-btn" id="ig-like-toggle">
+                                        <i class="fa-regular fa-heart"></i>
+                                    </button>
+                                    <button class="btn p-0 border-0 text-dark">
+                                        <i class="fa-regular fa-comment"></i>
+                                    </button>
+                                    <button class="btn p-0 border-0 text-dark">
+                                        <i class="fa-regular fa-paper-plane"></i>
+                                    </button>
+                                </div>
+                                <button class="btn p-0 border-0 text-dark">
+                                    <i class="fa-regular fa-bookmark"></i>
+                                </button>
+                            </div>
+                            <div class="fw-bold fs-7 mb-2" id="ig-likes-count">482 likes</div>
+                            <div class="d-flex align-items-center justify-content-between">
+                                <small class="text-muted" id="ig-post-date">Recently posted</small>
+                                <a href="<?php echo esc_url($instagram_url); ?>" target="_blank"
+                                    rel="noopener noreferrer"
+                                    class="btn btn-sm btn-outline-forest rounded-pill py-1 px-3 fs-7"
+                                    id="ig-view-native-btn">
+                                    View on Instagram <i class="fa-solid fa-arrow-up-right-from-square ms-1"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 <!-- ================= VIDEO MODAL (LISTEN MORE ABOUT US) ================= -->
 <div class="modal fade" id="videoShowcaseModal" tabindex="-1" aria-hidden="true">

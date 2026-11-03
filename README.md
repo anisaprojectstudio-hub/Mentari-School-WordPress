@@ -1,1 +1,0 @@
-# mentari-school-wordpress
