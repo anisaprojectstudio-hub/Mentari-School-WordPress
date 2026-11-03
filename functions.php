@@ -1,5 +1,7 @@
 <?php
 
+require_once get_template_directory() . '/inc/internal-page-customizer.php';
+
 function mentari_school_enqueue_assets()
 {
     $theme_uri = get_template_directory_uri();
@@ -48,28 +50,82 @@ function mentari_school_enqueue_assets()
 }
 add_action('wp_enqueue_scripts', 'mentari_school_enqueue_assets');
 
+function mentari_sanitize_hero_title($value)
+{
+    return wp_kses($value, array(
+        'br' => array(),
+        'span' => array(
+            'class' => array(),
+        ),
+    ));
+}
+
+function mentari_footer_link_url($setting_id, $default = '')
+{
+    $url = get_theme_mod($setting_id, $default);
+
+    return is_string($url) ? esc_url($url) : '';
+}
+
+function mentari_google_translate_is_selected()
+{
+    return isset($_COOKIE['googtrans'])
+        && '/en/id' === sanitize_text_field(wp_unslash($_COOKIE['googtrans']));
+}
+
+function mentari_enqueue_google_translate()
+{
+    if (mentari_google_translate_is_selected()) {
+        wp_enqueue_script(
+            'mentari-google-translate',
+            'https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit',
+            array('mentari-main-js'),
+            null,
+            true
+        );
+    }
+}
+add_action('wp_enqueue_scripts', 'mentari_enqueue_google_translate', 20);
+
 /*** Mentari School - Homepage Customizer ***/
 function mentari_school_customize_register($wp_customize)
 {
+    $wp_customize->add_panel('mentari_homepage_panel', array(
+        'title' => __('Homepage', 'mentari-school'),
+        'priority' => 100,
+    ));
 
-    // Panel pengaturan homepage
     $wp_customize->add_section('mentari_homepage_section', array(
-        'title' => 'Homepage Mentari School',
+        'title' => __('Hero & School Purpose', 'mentari-school'),
+        'panel' => 'mentari_homepage_panel',
         'priority' => 30,
     ));
 
-    // Pengaturan judul hero
-    $wp_customize->add_setting('mentari_main_hero_title', array(
-        'default' => 'More than lessons. It’s life.',
+    // Pengaturan teks utama dan teks highlight judul hero
+    $wp_customize->add_setting('mentari_hero_title_main', array(
+        'default' => 'More than lessons.',
         'sanitize_callback' => 'sanitize_text_field',
     ));
 
-    $wp_customize->add_control('mentari_hero_title_control', array(
-        'label' => 'Judul Hero Homepage',
+    $wp_customize->add_control('mentari_hero_title_main_control', array(
+        'label' => 'Judul Hero - Teks Utama',
         'section' => 'mentari_homepage_section',
-        'settings' => 'mentari_main_hero_title',
+        'settings' => 'mentari_hero_title_main',
         'type' => 'text',
-        'description' => 'Ubah judul utama yang tampil di bagian hero homepage.',
+        'description' => 'Teks utama judul hero.',
+    ));
+
+    $wp_customize->add_setting('mentari_hero_title_highlight', array(
+        'default' => 'It’s life.',
+        'sanitize_callback' => 'sanitize_text_field',
+    ));
+
+    $wp_customize->add_control('mentari_hero_title_highlight_control', array(
+        'label' => 'Judul Hero - Teks Highlight',
+        'section' => 'mentari_homepage_section',
+        'settings' => 'mentari_hero_title_highlight',
+        'type' => 'text',
+        'description' => 'Teks highlight ditampilkan dengan gaya tulisan berbeda.',
     ));
 
     // Pengaturan deskripsi hero
@@ -435,7 +491,8 @@ function mentari_school_customize_register($wp_customize)
     // SECTION 4: CALLOUT BANNER
 
     $wp_customize->add_section('mentari_callout_section', array(
-        'title' => __('Homepage - Callout Banner', 'mentari-school'),
+        'title' => __('Callout Banner', 'mentari-school'),
+        'panel' => 'mentari_homepage_panel',
         'priority' => 40,
     ));
 
@@ -504,7 +561,8 @@ function mentari_school_customize_register($wp_customize)
 
     /* SECTION 5: SCHOOL CURRICULA */
     $wp_customize->add_section('mentari_curricula_section', array(
-        'title' => __('Homepage - School Curricula', 'mentari-school'),
+        'title' => __('School Curricula', 'mentari-school'),
+        'panel' => 'mentari_homepage_panel',
         'priority' => 50,
     ));
 
@@ -532,7 +590,7 @@ function mentari_school_customize_register($wp_customize)
             'age' => 'Ages 2 - 5',
             'description' => 'Play-based, inquiry-driven learning nurturing natural curiosity and joyful discovery.',
             'image' => 'https://images.squarespace-cdn.com/content/v1/60c9a5215a821d628e0e1c65/1c0f3d35-d3ae-4cc5-9adc-18948a8b41a5/DSC08102.jpg',
-            'url' => '#admission',
+            'url' => mentari_page_url('early-years'),
             'button' => 'Explore Program',
         ),
         'elementary' => array(
@@ -540,7 +598,7 @@ function mentari_school_customize_register($wp_customize)
             'age' => 'Grades 1 - 5',
             'description' => 'IB Primary Years Programme (PYP) inspiring critical thinking and international mindedness.',
             'image' => 'https://images.squarespace-cdn.com/content/v1/60c9a5215a821d628e0e1c65/5837a716-b51d-4b88-966d-863b64140333/Elementary+7.png',
-            'url' => '#admission',
+            'url' => mentari_page_url('elementary'),
             'button' => 'Explore Program',
         ),
         'middle_school' => array(
@@ -548,7 +606,7 @@ function mentari_school_customize_register($wp_customize)
             'age' => 'Grades 6 - 8',
             'description' => 'IB Middle Years Programme (MYP) developing academic mastery, empathy, and leadership.',
             'image' => 'https://images.squarespace-cdn.com/content/v1/60c9a5215a821d628e0e1c65/7530af28-f093-4e25-8353-e17589919861/School+Curricula+-+JHS+45_2.jpg',
-            'url' => '#admission',
+            'url' => mentari_page_url('middle-school'),
             'button' => 'Explore Program',
         ),
         'high_school' => array(
@@ -556,7 +614,7 @@ function mentari_school_customize_register($wp_customize)
             'age' => 'Grades 9 - 12',
             'description' => 'Cambridge IGCSE and IB Diploma Programme (DP) preparing students for worldwide higher education success.',
             'image' => 'https://images.squarespace-cdn.com/content/v1/60c9a5215a821d628e0e1c65/1576ef94-cf1a-4ef4-86e4-2411b5967bb8/High+School+2.jpg',
-            'url' => '#admission',
+            'url' => mentari_page_url('high-school'),
             'button' => 'Explore Program',
         ),
         'university_counseling' => array(
@@ -652,7 +710,8 @@ function mentari_school_customize_register($wp_customize)
 
     /* SECTION 6: CAMPUSES */
     $wp_customize->add_section('mentari_campuses_section', array(
-        'title' => __('Homepage - Campuses', 'mentari-school'),
+        'title' => __('Campuses', 'mentari-school'),
+        'panel' => 'mentari_homepage_panel',
         'priority' => 60,
     ));
 
@@ -696,7 +755,7 @@ function mentari_school_customize_register($wp_customize)
             'location' => 'Bintaro Sektor 9',
             'description' => 'Comprehensive campus serving Early Childhood, Elementary, Middle School, and High School with state-of-the-art sports and arts facilities.',
             'image' => 'https://images.squarespace-cdn.com/content/v1/60c9a5215a821d628e0e1c65/7d1ed6cb-ede3-4e77-b77a-1b433961e04e/11.jpg',
-            'url' => '#contact-footer',
+            'url' => mentari_page_url('mis-bintaro'),
             'button' => 'Campus Details',
         ),
         'jakarta' => array(
@@ -704,7 +763,7 @@ function mentari_school_customize_register($wp_customize)
             'location' => 'Cipete, South Jakarta',
             'description' => 'Our flagship international campus in Cipete, renowned for its strong community, academic rigor, and vibrant student life.',
             'image' => 'https://images.squarespace-cdn.com/content/v1/60c9a5215a821d628e0e1c65/55ef63c0-1f26-4ef8-aacc-43a4fe82b0c4/DJI_0855.JPG',
-            'url' => '#contact-footer',
+            'url' => mentari_page_url('mis-jakarta'),
             'button' => 'Campus Details',
         ),
         'grand_surya' => array(
@@ -712,7 +771,7 @@ function mentari_school_customize_register($wp_customize)
             'location' => 'West Jakarta',
             'description' => 'Purpose-built modern campus providing exceptional international curriculum and holistic development programs in West Jakarta.',
             'image' => 'https://images.squarespace-cdn.com/content/v1/60c9a5215a821d628e0e1c65/b9584050-a372-4b9f-95e7-2e57688e2f7f/DJI_0266.jpg',
-            'url' => '#contact-footer',
+            'url' => mentari_page_url('mis-grand-surya'),
             'button' => 'Campus Details',
         ),
         'preschool_jakarta' => array(
@@ -720,7 +779,7 @@ function mentari_school_customize_register($wp_customize)
             'location' => 'Jakarta',
             'description' => 'Nurturing joyful discovery and developmental milestones for children in their most formative early years.',
             'image' => 'https://images.squarespace-cdn.com/content/v1/60c9a5215a821d628e0e1c65/c3d7a938-2ffe-460e-92a4-6a785a41fdb2/L1030398.jpg',
-            'url' => '#contact-footer',
+            'url' => mentari_page_url('mentari-preschool'),
             'button' => 'Campus Details',
         ),
         'sunflower' => array(
@@ -728,7 +787,7 @@ function mentari_school_customize_register($wp_customize)
             'location' => 'Bintaro',
             'description' => 'A warm, homey, and stimulating space where little learners flourish through creative play and values-driven guidance.',
             'image' => 'https://images.squarespace-cdn.com/content/v1/60c9a5215a821d628e0e1c65/7bae7578-f323-4c61-952f-dc78f4ec141f/DSC01916-2.jpg',
-            'url' => '#contact-footer',
+            'url' => mentari_page_url('sunflower-preschool'),
             'button' => 'Campus Details',
         ),
     );
@@ -803,7 +862,8 @@ function mentari_school_customize_register($wp_customize)
     // ================= SECTION 7: LISTEN MORE ABOUT US =================
 
     $wp_customize->add_section('mentari_listen_video_section', array(
-        'title' => __('Homepage - Listen More About Us', 'mentari-school'),
+        'title' => __('Listen More About Us', 'mentari-school'),
+        'panel' => 'mentari_homepage_panel',
         'priority' => 70,
     ));
 
@@ -883,7 +943,8 @@ function mentari_school_customize_register($wp_customize)
     // ================= SECTION 8 & 9: UNIVERSITY PREPARATION & LOGOS =================
 
     $wp_customize->add_section('mentari_universities_section', array(
-        'title' => __('Homepage - University Preparation', 'mentari-school'),
+        'title' => __('University Preparation', 'mentari-school'),
+        'panel' => 'mentari_homepage_panel',
         'priority' => 80,
     ));
 
@@ -967,7 +1028,8 @@ function mentari_school_customize_register($wp_customize)
     // ================= SECTION 10: CONNECT WITH US =================
 
     $wp_customize->add_section('mentari_instagram_section', array(
-        'title' => __('Homepage - Connect With Us', 'mentari-school'),
+        'title' => __('Connect With Us', 'mentari-school'),
+        'panel' => 'mentari_homepage_panel',
         'priority' => 90,
     ));
 
@@ -1162,7 +1224,8 @@ function mentari_school_customize_register($wp_customize)
     // SECTION 11: ONLINE ADMISSION CTA
 
     $wp_customize->add_section('mentari_admission_section', array(
-        'title' => __('Homepage - Online Admission CTA', 'mentari-school'),
+        'title' => __('Online Admission CTA', 'mentari-school'),
+        'panel' => 'mentari_homepage_panel',
         'priority' => 100,
     ));
 
@@ -1227,6 +1290,361 @@ function mentari_school_customize_register($wp_customize)
         'type' => 'url',
     ));
 
+    $wp_customize->add_section('mentari_footer_links_section', array(
+        'title' => __('Footer - Site Links', 'mentari-school'),
+        'priority' => 110,
+    ));
+
+    $footer_links = array(
+        'mentari_footer_privacy_url' => array(
+            'label' => __('Privacy Policy URL', 'mentari-school'),
+            'default' => function_exists('get_privacy_policy_url') ? get_privacy_policy_url() : '',
+        ),
+        'mentari_footer_terms_url' => array(
+            'label' => __('Terms & Conditions URL', 'mentari-school'),
+            'default' => '',
+        ),
+        'mentari_footer_sitemap_url' => array(
+            'label' => __('Sitemap URL', 'mentari-school'),
+            'default' => home_url('/wp-sitemap.xml'),
+        ),
+    );
+
+    foreach ($footer_links as $setting_id => $link) {
+        $wp_customize->add_setting($setting_id, array(
+            'default' => $link['default'],
+            'sanitize_callback' => 'esc_url_raw',
+            'transport' => 'refresh',
+        ));
+
+        $wp_customize->add_control($setting_id, array(
+            'label' => $link['label'],
+            'section' => 'mentari_footer_links_section',
+            'type' => 'url',
+        ));
+    }
 
 }
 add_action('customize_register', 'mentari_school_customize_register');
+
+/*** Mentari School - Subpage integration ***/
+
+/**
+ * Daftar halaman subpage: slug => judul halaman WordPress.
+ * Slug harus sama dengan nama template page-{slug}.php.
+ */
+function mentari_subpages()
+{
+    return array(
+        'mis-story' => 'MIS Story',
+        'positive-education' => 'Positive Education At MIS',
+        'early-years' => 'Early Years',
+        'elementary' => 'Elementary',
+        'middle-school' => 'Middle School',
+        'high-school' => 'High School',
+        'university-counseling' => 'University Counseling',
+        'mis-jakarta' => 'MIS Jakarta',
+        'mis-bintaro' => 'MIS Bintaro',
+        'mis-grand-surya' => 'MIS Grand Surya',
+        'mentari-preschool' => 'Mentari Preschool Jakarta',
+        'sunflower-preschool' => 'Sunflower Preschool',
+        'admission' => 'Online Admission',
+        'contact' => 'Contact Us',
+    );
+}
+
+/** Grup menu dropdown (untuk status aktif parent). */
+function mentari_nav_groups()
+{
+    return array(
+        'about' => array('mis-story', 'positive-education'),
+        'programs' => array('early-years', 'elementary', 'middle-school', 'high-school', 'university-counseling'),
+        'campus' => array('mis-jakarta', 'mis-bintaro', 'mis-grand-surya', 'mentari-preschool', 'sunflower-preschool'),
+    );
+}
+
+/** URL halaman berdasarkan slug (memakai permalink asli bila halaman sudah ada). */
+function mentari_page_url($slug)
+{
+    $page = get_page_by_path($slug, OBJECT, 'page');
+    if ($page && 'publish' === $page->post_status) {
+        return get_permalink($page);
+    }
+    return home_url('/' . $slug . '/');
+}
+
+/** Link "Connect": anchor lokal di homepage, atau homepage + #connect dari halaman lain. */
+function mentari_connect_url()
+{
+    return is_front_page() ? '#connect' : home_url('/#connect');
+}
+
+/** Class ' active' bila halaman saat ini adalah $slug. */
+function mentari_active_class($slug)
+{
+    return is_page($slug) ? ' active' : '';
+}
+
+/** Class ' active' bila halaman saat ini ada di dalam grup dropdown. */
+function mentari_group_active($group)
+{
+    $groups = mentari_nav_groups();
+    if (isset($groups[$group]) && is_page($groups[$group])) {
+        return ' active';
+    }
+    return '';
+}
+
+/** Ubah nilai Customizer lama seperti "mis-story.html" menjadi URL WordPress. */
+function mentari_resolve_url($url)
+{
+    $url = trim((string) $url);
+    if ('' === $url || '#' === $url[0] || preg_match('#^(https?:)?//#i', $url)) {
+        return $url;
+    }
+    if (preg_match('#^([a-z0-9-]+)\.html(\#.*)?$#i', $url, $m)) {
+        $anchor = isset($m[2]) ? $m[2] : '';
+        if ('index' === strtolower($m[1])) {
+            return home_url('/') . $anchor;
+        }
+        if (array_key_exists($m[1], mentari_subpages())) {
+            return mentari_page_url($m[1]) . $anchor;
+        }
+    }
+    return $url;
+}
+
+/** Judul dokumen per halaman (diambil dari <title> HTML sumber). */
+function mentari_document_title()
+{
+    $titles = array(
+        'mis-story' => 'MIS Story - Mentari Intercultural School',
+        'positive-education' => 'Positive Education - Mentari Intercultural School',
+        'early-years' => 'Early Years Education - Mentari Intercultural School',
+        'elementary' => 'Elementary School - Mentari Intercultural School',
+        'middle-school' => 'Middle School - Mentari Intercultural School',
+        'high-school' => 'High School - Mentari Intercultural School',
+        'university-counseling' => 'University Counseling - Mentari Intercultural School',
+        'mis-jakarta' => 'MIS Jakarta Campus - Mentari Intercultural School',
+        'mis-bintaro' => 'MIS Bintaro Campus - Mentari Intercultural School',
+        'mis-grand-surya' => 'MIS Grand Surya Campus - Mentari Intercultural School',
+        'mentari-preschool' => 'Mentari Preschool Jakarta - Mentari Intercultural School',
+        'sunflower-preschool' => 'Sunflower Preschool - Mentari Intercultural School',
+        'admission' => 'Online Admission - Mentari Intercultural School',
+        'contact' => 'Contact Us - Mentari Intercultural School'
+    );
+    if (is_front_page()) {
+        return 'Mentari Intercultural School - More than lessons, it\'s life';
+    }
+    if (is_page()) {
+        $slug = get_post_field('post_name', get_queried_object_id());
+        if (isset($titles[$slug])) {
+            return mentari_page_content($slug, 'seo_title');
+        }
+    }
+    return wp_get_document_title();
+}
+
+/** Meta description per halaman. */
+function mentari_document_description()
+{
+    $descs = array(
+        'mis-story' => 'MIS Story - Mentari Intercultural School history, founded in 1994 by 5 mothers with a vision for transformative international education.',
+        'positive-education' => 'Positive Education at MIS nurtures academic mastery and personal flourishing through positive psychology.',
+        'early-years' => 'Early Years Education at Mentari Intercultural School for ages 2-5.',
+        'elementary' => 'Elementary School at Mentari Intercultural School offering the IB Primary Years Programme (PYP).',
+        'middle-school' => 'Middle School at Mentari Intercultural School offering the IB Middle Years Programme (MYP).',
+        'high-school' => 'Senior High School at Mentari Intercultural School offering Cambridge IGCSE and IB Diploma Programme.',
+        'university-counseling' => 'University Counseling at Mentari Intercultural School guiding students to top global institutions.',
+        'mis-jakarta' => 'Mentari Intercultural School Jakarta Campus in Cipete.',
+        'mis-bintaro' => 'Mentari Intercultural School Bintaro Campus in Sektor 9.',
+        'mis-grand-surya' => 'Mentari Intercultural School Grand Surya Campus in West Jakarta.',
+        'mentari-preschool' => 'Mentari Preschool Jakarta providing early childhood education since 1994.',
+        'sunflower-preschool' => 'Sunflower Preschool Bintaro providing early childhood education.',
+        'admission' => 'Apply online for admission at Mentari Intercultural School.',
+        'contact' => 'Contact Mentari Intercultural School across all campuses.'
+    );
+    if (is_page()) {
+        $slug = get_post_field('post_name', get_queried_object_id());
+        if (!empty($descs[$slug])) {
+            return mentari_page_content($slug, 'seo_description');
+        }
+    }
+    return 'Mentari Intercultural School is one of the top and fastest growing international schools in Jakarta. Nurturing minds, building characters, shaping futures.';
+}
+
+/** Google Fonts (Poppins & Urbanist) - ada di HTML sumber, belum dimuat oleh tema. */
+function mentari_enqueue_fonts()
+{
+    wp_enqueue_style(
+        'mentari-google-fonts',
+        'https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,600&family=Urbanist:ital,wght@0,400;0,500;0,600;0,700;1,400;1,700&display=swap',
+        array(),
+        null
+    );
+}
+add_action('wp_enqueue_scripts', 'mentari_enqueue_fonts', 5);
+
+/**
+ * Buat entri Pages (slug sesuai template) bila belum ada.
+ * Tidak menimpa halaman yang sudah dibuat pengguna.
+ */
+function mentari_seed_pages()
+{
+    $created = array();
+    foreach (mentari_subpages() as $slug => $title) {
+        if (get_page_by_path($slug, OBJECT, 'page')) {
+            continue;
+        }
+        $id = wp_insert_post(array(
+            'post_type' => 'page',
+            'post_status' => 'publish',
+            'post_title' => $title,
+            'post_name' => $slug,
+            'post_content' => '',
+        ), true);
+        if (!is_wp_error($id)) {
+            $created[] = $slug;
+        }
+    }
+    update_option('mentari_pages_seeded_v1', '1');
+    return $created;
+}
+add_action('after_switch_theme', 'mentari_seed_pages');
+add_action('admin_init', function () {
+    if ('1' !== get_option('mentari_pages_seeded_v1') && current_user_can('edit_pages')) {
+        mentari_seed_pages();
+    }
+});
+
+/** Handler form Online Admission & Contact (AJAX, dipanggil oleh scripts/main.js). */
+function mentari_form_respond($message, $status = 200, $errors = array())
+{
+    $body = array('message' => $message);
+    if ($errors) {
+        $body['errors'] = $errors;
+    }
+    wp_send_json($body, $status);
+}
+
+function mentari_form_handle($type)
+{
+    if (!isset($_POST['mentari_nonce']) || !wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['mentari_nonce'])), 'mentari_' . $type)) {
+        mentari_form_respond('Sesi formulir kedaluwarsa. Silakan muat ulang halaman lalu coba lagi.', 403);
+    }
+    // Honeypot: bot mengisi field tersembunyi, pura-pura sukses.
+    if (!empty($_POST['website'])) {
+        mentari_form_respond('Thank you! Your inquiry has been received.');
+    }
+
+    $campuses = array(
+        'all' => 'All / General Inquiries',
+        'jakarta' => 'MIS Jakarta (Cipete)',
+        'bintaro' => 'MIS Bintaro',
+        'grandsurya' => 'MIS Grand Surya',
+        'mentari-preschool' => 'Mentari Preschool Jakarta',
+        'sunflower' => 'Sunflower Preschool',
+    );
+    $levels = array(
+        'early-years' => 'Early Childhood (Ages 2-5)',
+        'elementary' => 'Elementary (Grades 1-5)',
+        'middle-school' => 'Middle School (Grades 6-8)',
+        'high-school' => 'High School (Grades 9-12)',
+    );
+    $get = function ($key) {
+        return isset($_POST[$key]) ? trim(sanitize_text_field(wp_unslash($_POST[$key]))) : '';
+    };
+
+    $errors = array();
+    $email = sanitize_email(isset($_POST['email']) ? wp_unslash($_POST['email']) : '');
+    $message = isset($_POST['message']) ? trim(sanitize_textarea_field(wp_unslash($_POST['message']))) : '';
+    $phone = $get('phone');
+    $campus = $get('campus');
+
+    if (!is_email($email)) {
+        $errors['email'] = array('Masukkan alamat email yang valid.');
+    }
+    if ($campus && !isset($campuses[$campus])) {
+        $errors['campus'] = array('Pilihan kampus tidak valid.');
+    }
+
+    if ('admission' === $type) {
+        $parent = $get('parent_name');
+        $grade = $get('grade_level');
+        if ('' === $parent) {
+            $errors['parent_name'] = array('Nama orang tua/wali wajib diisi.');
+        }
+        if ('' === $phone) {
+            $errors['phone'] = array('Nomor telepon/WhatsApp wajib diisi.');
+        }
+        if ('' === $campus) {
+            $errors['campus'] = array('Pilih kampus.');
+        }
+        if (!isset($levels[$grade])) {
+            $errors['grade_level'] = array('Pilih jenjang.');
+        }
+        $subject = 'Online Admission Inquiry - ' . $parent;
+        $lines = array(
+            'Parent / Guardian' => $parent,
+            'Email' => $email,
+            'Phone / WhatsApp' => $phone,
+            'Campus Preference' => isset($campuses[$campus]) ? $campuses[$campus] : $campus,
+            'Grade Level' => isset($levels[$grade]) ? $levels[$grade] : $grade,
+            'Student Name' => $get('student_name'),
+        );
+        $name = $parent;
+    } else {
+        $name = $get('name');
+        $subj = $get('subject');
+        if ('' === $name) {
+            $errors['name'] = array('Nama wajib diisi.');
+        }
+        if ('' === $subj) {
+            $errors['subject'] = array('Subjek wajib diisi.');
+        }
+        if ('' === $message) {
+            $errors['message'] = array('Pesan wajib diisi.');
+        }
+        $subject = 'Contact Form - ' . $subj;
+        $lines = array(
+            'Name' => $name,
+            'Email' => $email,
+            'Phone / WhatsApp' => $phone,
+            'Campus Inquiry' => isset($campuses[$campus]) ? $campuses[$campus] : $campus,
+            'Subject' => $subj,
+        );
+    }
+
+    if ($errors) {
+        mentari_form_respond('Periksa kembali isian formulir.', 422, $errors);
+    }
+
+    $body = '';
+    foreach ($lines as $label => $value) {
+        $body .= $label . ': ' . $value . "\n";
+    }
+    $body .= "\nMessage:\n" . $message . "\n";
+
+    $to = apply_filters('mentari_form_recipient', get_option('admin_email'), $type);
+    $headers = array('Reply-To: ' . $name . ' <' . $email . '>');
+    $sent = wp_mail($to, '[' . get_bloginfo('name') . '] ' . $subject, $body, $headers);
+    do_action('mentari_form_submitted', $type, $lines, $message, $sent);
+
+    if (!$sent) {
+        mentari_form_respond('Pesan belum dapat dikirim. Silakan coba lagi atau hubungi kami langsung.', 500);
+    }
+    mentari_form_respond('<strong>Thank you!</strong> Your inquiry has been received. Our team will contact you shortly.');
+}
+
+add_action('wp_ajax_mentari_admission', function () {
+    mentari_form_handle('admission');
+});
+add_action('wp_ajax_nopriv_mentari_admission', function () {
+    mentari_form_handle('admission');
+});
+add_action('wp_ajax_mentari_contact', function () {
+    mentari_form_handle('contact');
+});
+add_action('wp_ajax_nopriv_mentari_contact', function () {
+    mentari_form_handle('contact');
+});
