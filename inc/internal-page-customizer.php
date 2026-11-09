@@ -360,3 +360,161 @@ function mentari_early_years_customize_register($wp_customize)
     }
 }
 add_action('customize_register', 'mentari_early_years_customize_register');
+
+
+
+/*** Mentari School - MIS Bintaro Campus Customizer ***/
+
+/**
+ * Konfigurasi field halaman MIS Bintaro.
+ */
+function mentari_bintaro_sections()
+{
+    return array(
+        'hero' => array(
+            'title' => 'Hero Section',
+            'fields' => array(
+                'hero_label' => array(
+                    'text',
+                    'Hero Label',
+                    'Campus Location'
+                ),
+                'hero_title' => array(
+                    'text',
+                    'Hero Title',
+                    'MIS Bintaro'
+                ),
+                'hero_address' => array(
+                    'textarea',
+                    'Campus Address',
+                    'Jl. Bintaro Utama Sektor 9, Pondok Aren, Tangerang Selatan'
+                ),
+                'hero_badge' => array(
+                    'text',
+                    'Hero Badge',
+                    'Green Campus'
+                ),
+            ),
+        ),
+
+        'welcome' => array(
+            'title' => 'Welcome Section',
+            'fields' => array(
+                'welcome_title' => array(
+                    'text',
+                    'Welcome Title',
+                    'Welcome to MIS Bintaro'
+                ),
+                'welcome_lead' => array(
+                    'textarea',
+                    'Main Description',
+                    'An expansive, green campus serving Early Childhood, Elementary, Middle School, and High School with cutting-edge academic and sports facilities.'
+                ),
+                'welcome_description' => array(
+                    'textarea',
+                    'Additional Description',
+                    'MIS Bintaro fosters a close-knit, supportive community where students are empowered to lead, innovate, and excel in an international learning environment.'
+                ),
+                'welcome_button' => array(
+                    'text',
+                    'Button Text',
+                    'Visit MIS Bintaro'
+                ),
+                'welcome_image' => array(
+                    'image',
+                    'Campus Image',
+                    'https://images.squarespace-cdn.com/content/v1/60c9a5215a821d628e0e1c65/7d1ed6cb-ede3-4e77-b77a-1b433961e04e/11.jpg'
+                ),
+            ),
+        ),
+    );
+}
+
+
+/**
+ * Mengambil nilai Customizer MIS Bintaro.
+ */
+function mentari_bintaro($key)
+{
+    foreach (mentari_bintaro_sections() as $section) {
+        if (isset($section['fields'][$key])) {
+            $field = $section['fields'][$key];
+
+            return get_theme_mod(
+                'mentari_bintaro_' . $key,
+                $field[2]
+            );
+        }
+    }
+
+    return '';
+}
+
+
+/**
+ * Mendaftarkan Customizer MIS Bintaro.
+ */
+function mentari_bintaro_customize_register($wp_customize)
+{
+    $wp_customize->add_panel('mentari_bintaro_panel', array(
+        'title' => __('MIS Bintaro Campus', 'mentari-school'),
+        'priority' => 103,
+    ));
+
+    $sanitizers = array(
+        'text' => 'sanitize_text_field',
+        'textarea' => 'sanitize_textarea_field',
+        'image' => 'esc_url_raw',
+    );
+
+    foreach (mentari_bintaro_sections() as $section_id => $section) {
+
+        $section_name = 'mentari_bintaro_' . $section_id;
+
+        $wp_customize->add_section($section_name, array(
+            'title' => $section['title'],
+            'panel' => 'mentari_bintaro_panel',
+        ));
+
+        foreach ($section['fields'] as $key => $field) {
+
+            list($type, $label, $default) = $field;
+
+            $setting_id = 'mentari_bintaro_' . $key;
+
+            $wp_customize->add_setting($setting_id, array(
+                'default' => $default,
+                'sanitize_callback' => $sanitizers[$type],
+                'transport' => 'refresh',
+            ));
+
+            if ('image' === $type) {
+
+                $wp_customize->add_control(
+                    new WP_Customize_Image_Control(
+                        $wp_customize,
+                        $setting_id,
+                        array(
+                            'label' => $label,
+                            'section' => $section_name,
+                        )
+                    )
+                );
+
+            } else {
+
+                $wp_customize->add_control($setting_id, array(
+                    'label' => $label,
+                    'section' => $section_name,
+                    'type' => $type,
+                ));
+
+            }
+        }
+    }
+}
+
+add_action(
+    'customize_register',
+    'mentari_bintaro_customize_register'
+);
