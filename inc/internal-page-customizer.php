@@ -305,6 +305,37 @@ function mentari_story_customize_register($wp_customize)
 }
 add_action('customize_register', 'mentari_story_customize_register');
 
+
+function mentari_early_years_sections()
+{
+    return array(
+        'hero' => array(
+            'title' => __('Hero Banner', 'mentari-school'),
+            'fields' => array(
+                'hero_label' => array('text', 'Label kecil', 'Early Childhood'),
+                'hero_title' => array('text', 'Judul', 'Early Years Education'),
+                'hero_desc' => array('textarea', 'Deskripsi', '“What we learn with pleasure, we never forget.” Nurturing young minds through play-based discovery.'),
+                'hero_badge' => array('text', 'Badge usia', 'Ages 2 - 5'),
+            ),
+        ),
+        'content' => array(
+            'title' => __('Konten Utama', 'mentari-school'),
+            'fields' => array(
+                'content_title' => array('text', 'Judul', 'Nurturing Natural Curiosity'),
+                'content_lead' => array('textarea', 'Paragraf utama', 'Our Early Years curriculum is a child-centered, developmental program inspired by Montessori and inquiry-based principles.'),
+                'content_text' => array('textarea', 'Paragraf kedua', 'We foster gross and fine motor skills, language acquisition, social emotional foundation, and sensory discovery in warm, safe, and stimulating spaces.'),
+                'content_btn' => array('text', 'Teks tombol', 'Apply for Early Years'),
+                'content_image' => array('image', 'Gambar', 'https://images.squarespace-cdn.com/content/v1/60c9a5215a821d628e0e1c65/1c0f3d35-d3ae-4cc5-9adc-18948a8b41a5/DSC08102.jpg'),
+                'content_image_alt' => array('text', 'Alt teks gambar', 'Early Years Classroom'),
+            ),
+        ),
+    );
+}
+
+/**
+ * Ambil nilai satu field. Dipakai di template:
+ * echo esc_html(mentari_early_years('hero_title'));
+ */
 function mentari_early_years($key)
 {
     foreach (mentari_early_years_sections() as $section) {
