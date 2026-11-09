@@ -177,3 +177,130 @@ function mentari_page_content($slug, $field_id)
 
     return $value;
 }
+
+/*** Mentari School - MIS Story Page Customizer ***/
+
+/**
+ * Definisi semua field halaman MIS Story.
+ * Format: section => array(title, fields => array(key => array(type, label, default)))
+ * type: text | textarea | image
+ * Untuk menambah field baru, cukup tambah baris di sini lalu pakai mentari_story('key') di template.
+ */
+function mentari_story_sections()
+{
+    $img = 'https://images.squarespace-cdn.com/content/v1/60c9a5215a821d628e0e1c65/';
+
+    return array(
+        'hero' => array(
+            'title' => 'Hero',
+            'fields' => array(
+                'hero_label' => array('text', 'Label kecil', 'About Mentari'),
+                'hero_title' => array('text', 'Judul', 'The MIS Story'),
+                'hero_desc' => array('textarea', 'Deskripsi', 'From a humble house with five students in 1994 to thousands of thriving learners across Greater Jakarta.'),
+                'hero_badge' => array('text', 'Teks badge', 'Est. 1994 • 30+ Years of Excellence'),
+            ),
+        ),
+        'origin' => array(
+            'title' => 'Our Origins',
+            'fields' => array(
+                'origin_label' => array('text', 'Label kecil', 'Our Origins'),
+                'origin_title' => array('text', 'Judul', 'Founded with Heart, Built Brick by Brick'),
+                'origin_lead' => array('textarea', 'Paragraf utama', 'Yayasan Perkembangan Anak Indonesia (YPAI) was established in 1994 by five mothers with a dream of providing a transformative education for a better future for our children.'),
+                'origin_text' => array('textarea', 'Paragraf kedua', 'The founders were the very first educators in the institution, nurturing each student with devotion. It started in Mentari Preschool (formerly known as Sunshine Preschool) with just five students and five teachers. We were close as a family, supporting one another through every milestone and growth.'),
+                'origin_stat1_num' => array('text', 'Statistik 1 - Angka', '1994'),
+                'origin_stat1_text' => array('text', 'Statistik 1 - Keterangan', 'Founded by 5 dedicated mothers'),
+                'origin_stat2_num' => array('text', 'Statistik 2 - Angka', '5 Campuses'),
+                'origin_stat2_text' => array('text', 'Statistik 2 - Keterangan', 'Serving Greater Jakarta'),
+                'origin_image' => array('image', 'Gambar', $img . '5dece523-f2aa-4d83-bf13-34f01f47627f/DSC09182.jpg'),
+            ),
+        ),
+        'traits' => array(
+            'title' => 'Core Learner Traits',
+            'fields' => array(
+                'traits_label' => array('text', 'Label kecil', 'Our Philosophy'),
+                'traits_title' => array('text', 'Judul', 'Mentari Core Learner Traits'),
+                'traits_desc' => array('textarea', 'Deskripsi', 'We believe true education nurtures both intellectual excellence and moral character.'),
+                'trait1_title' => array('text', 'Trait 1 - Judul', 'Morally Upright'),
+                'trait1_desc' => array('textarea', 'Trait 1 - Deskripsi', 'Acting with integrity, honesty, and deep respect for cultural diversity and shared humanity.'),
+                'trait1_image' => array('image', 'Trait 1 - Gambar', $img . 'cac3216d-e682-4c29-a20b-25bc8b71723f/Morally+Upright+%28Mentari+Traits%29+15.png'),
+                'trait2_title' => array('text', 'Trait 2 - Judul', 'Engaging Communicator'),
+                'trait2_desc' => array('textarea', 'Trait 2 - Deskripsi', 'Expressing ideas confidently and empathetically in multiple languages and collaborative settings.'),
+                'trait2_image' => array('image', 'Trait 2 - Gambar', $img . '2579f3ea-7f6e-4d3a-8456-2b57bd0c2ba1/Engaging+Communicator+%28Mentari+Traits%29+9.png'),
+                'trait3_title' => array('text', 'Trait 3 - Judul', 'Compassionate Leader'),
+                'trait3_desc' => array('textarea', 'Trait 3 - Deskripsi', 'Actively contributing to positive change in school, local communities, and global society.'),
+                'trait3_image' => array('image', 'Trait 3 - Gambar', $img . 'af28e894-75c3-4e35-b022-e759f8631805/Never+Too+Busy+%28Mentari+Traits%29+15.png'),
+            ),
+        ),
+        'cta' => array(
+            'title' => 'Call to Action',
+            'fields' => array(
+                'cta_title' => array('text', 'Judul', 'Be Part of the Mentari Story'),
+                'cta_desc' => array('textarea', 'Deskripsi', "Discover how our values-driven education can unlock your child's highest potential."),
+                'cta_btn1' => array('text', 'Teks tombol 1 (ke Admission)', 'Apply Now'),
+                'cta_btn2' => array('text', 'Teks tombol 2 (ke Contact)', 'Schedule Campus Tour'),
+            ),
+        ),
+    );
+}
+
+/** Ambil nilai satu field MIS Story (dari Customizer, atau default bila belum diubah). */
+function mentari_story($key)
+{
+    static $defaults = null;
+    if (null === $defaults) {
+        $defaults = array();
+        foreach (mentari_story_sections() as $section) {
+            foreach ($section['fields'] as $field_key => $field) {
+                $defaults[$field_key] = $field[2];
+            }
+        }
+    }
+    $default = isset($defaults[$key]) ? $defaults[$key] : '';
+    return get_theme_mod('mentari_story_' . $key, $default);
+}
+
+function mentari_story_customize_register($wp_customize)
+{
+    $wp_customize->add_panel('mentari_story_panel', array(
+        'title' => __('MIS Story Page', 'mentari-school'),
+        'priority' => 101,
+    ));
+
+    $sanitizers = array(
+        'text' => 'sanitize_text_field',
+        'textarea' => 'sanitize_textarea_field',
+        'image' => 'esc_url_raw',
+    );
+
+    foreach (mentari_story_sections() as $section_id => $section) {
+        $wp_customize->add_section('mentari_story_' . $section_id, array(
+            'title' => $section['title'],
+            'panel' => 'mentari_story_panel',
+        ));
+
+        foreach ($section['fields'] as $key => $field) {
+            list($type, $label, $default) = $field;
+            $setting_id = 'mentari_story_' . $key;
+
+            $wp_customize->add_setting($setting_id, array(
+                'default' => $default,
+                'sanitize_callback' => $sanitizers[$type],
+                'transport' => 'refresh',
+            ));
+
+            if ('image' === $type) {
+                $wp_customize->add_control(new WP_Customize_Image_Control($wp_customize, $setting_id, array(
+                    'label' => $label,
+                    'section' => 'mentari_story_' . $section_id,
+                )));
+            } else {
+                $wp_customize->add_control($setting_id, array(
+                    'label' => $label,
+                    'section' => 'mentari_story_' . $section_id,
+                    'type' => $type,
+                ));
+            }
+        }
+    }
+}
+add_action('customize_register', 'mentari_story_customize_register');
