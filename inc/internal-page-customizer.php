@@ -304,3 +304,59 @@ function mentari_story_customize_register($wp_customize)
     }
 }
 add_action('customize_register', 'mentari_story_customize_register');
+
+function mentari_early_years($key)
+{
+    foreach (mentari_early_years_sections() as $section) {
+        if (isset($section['fields'][$key])) {
+            return get_theme_mod('mentari_early_years_' . $key, $section['fields'][$key][2]);
+        }
+    }
+    return '';
+}
+
+function mentari_early_years_customize_register($wp_customize)
+{
+    $wp_customize->add_panel('mentari_early_years_panel', array(
+        'title' => __('Early Years Page', 'mentari-school'),
+        'priority' => 102,
+    ));
+
+    $sanitizers = array(
+        'text' => 'sanitize_text_field',
+        'textarea' => 'sanitize_textarea_field',
+        'image' => 'esc_url_raw',
+    );
+
+    foreach (mentari_early_years_sections() as $section_id => $section) {
+        $wp_customize->add_section('mentari_early_years_' . $section_id, array(
+            'title' => $section['title'],
+            'panel' => 'mentari_early_years_panel',
+        ));
+
+        foreach ($section['fields'] as $key => $field) {
+            list($type, $label, $default) = $field;
+            $setting_id = 'mentari_early_years_' . $key;
+
+            $wp_customize->add_setting($setting_id, array(
+                'default' => $default,
+                'sanitize_callback' => $sanitizers[$type],
+                'transport' => 'refresh',
+            ));
+
+            if ('image' === $type) {
+                $wp_customize->add_control(new WP_Customize_Image_Control($wp_customize, $setting_id, array(
+                    'label' => $label,
+                    'section' => 'mentari_early_years_' . $section_id,
+                )));
+            } else {
+                $wp_customize->add_control($setting_id, array(
+                    'label' => $label,
+                    'section' => 'mentari_early_years_' . $section_id,
+                    'type' => $type,
+                ));
+            }
+        }
+    }
+}
+add_action('customize_register', 'mentari_early_years_customize_register');
