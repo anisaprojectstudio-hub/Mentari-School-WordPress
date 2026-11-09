@@ -304,3 +304,104 @@ function mentari_story_customize_register($wp_customize)
     }
 }
 add_action('customize_register', 'mentari_story_customize_register');
+
+
+/*** Mentari School - Positive Education Page Customizer ***/
+
+/**
+ * Definisi semua field halaman Positive Education.
+ * Format: section => array(title, fields => array(key => array(type, label, default)))
+ * type: text | textarea | image
+ */
+function mentari_pe_sections()
+{
+    return array(
+        'hero' => array(
+            'title' => 'Hero',
+            'fields' => array(
+                'hero_label' => array('text', 'Label kecil', 'School Culture'),
+                'hero_title' => array('text', 'Judul', 'Positive Education at MIS'),
+                'hero_desc' => array('textarea', 'Deskripsi', 'Shaping students to thrive academically and personally in a deeply supportive and nurturing environment.'),
+                'hero_badge' => array('text', 'Teks badge', 'PERMAH Wellbeing Framework'),
+            ),
+        ),
+        'framework' => array(
+            'title' => 'Wellbeing Framework',
+            'fields' => array(
+                'fw_label' => array('text', 'Label kecil', 'Wellbeing Framework'),
+                'fw_title' => array('text', 'Judul', 'Curiosity at the Heart of Learning'),
+                'fw_lead' => array('textarea', 'Paragraf utama', 'Positive Education brings together the science of positive psychology with best practice teaching to encourage individuals, schools, and communities to flourish.'),
+                'fw_text' => array('textarea', 'Paragraf kedua', 'At MIS, we embed the PERMAH framework (Positive Emotion, Engagement, Relationships, Meaning, Accomplishment, and Health) throughout our daily school life. When students feel psychologically safe and valued, their cognitive capacity and creative problem-solving thrive.'),
+                'fw_image' => array('image', 'Gambar', 'https://images.squarespace-cdn.com/content/v1/60c9a5215a821d628e0e1c65/72228bbc-8e5a-4a15-81fb-105f3a73bd50/Teaching+103.jpg'),
+                'feat1_icon' => array('text', 'Poin 1 - Class ikon Font Awesome', 'fa-solid fa-heart'),
+                'feat1_title' => array('text', 'Poin 1 - Judul', 'Emotional Well-being'),
+                'feat1_desc' => array('textarea', 'Poin 1 - Deskripsi', 'Cultivating resilience, gratitude, and empathy in everyday interactions.'),
+                'feat2_icon' => array('text', 'Poin 2 - Class ikon Font Awesome', 'fa-solid fa-brain'),
+                'feat2_title' => array('text', 'Poin 2 - Judul', 'Character Strengths'),
+                'feat2_desc' => array('textarea', 'Poin 2 - Deskripsi', 'Helping students discover and build upon their unique innate gifts.'),
+            ),
+        ),
+    );
+}
+
+/** Ambil nilai satu field Positive Education (dari Customizer, atau default bila belum diubah). */
+function mentari_pe($key)
+{
+    static $defaults = null;
+    if (null === $defaults) {
+        $defaults = array();
+        foreach (mentari_pe_sections() as $section) {
+            foreach ($section['fields'] as $field_key => $field) {
+                $defaults[$field_key] = $field[2];
+            }
+        }
+    }
+    $default = isset($defaults[$key]) ? $defaults[$key] : '';
+    return get_theme_mod('mentari_pe_' . $key, $default);
+}
+
+function mentari_pe_customize_register($wp_customize)
+{
+    $wp_customize->add_panel('mentari_pe_panel', array(
+        'title' => __('Positive Education Page', 'mentari-school'),
+        'priority' => 102,
+    ));
+
+    $sanitizers = array(
+        'text' => 'sanitize_text_field',
+        'textarea' => 'sanitize_textarea_field',
+        'image' => 'esc_url_raw',
+    );
+
+    foreach (mentari_pe_sections() as $section_id => $section) {
+        $wp_customize->add_section('mentari_pe_' . $section_id, array(
+            'title' => $section['title'],
+            'panel' => 'mentari_pe_panel',
+        ));
+
+        foreach ($section['fields'] as $key => $field) {
+            list($type, $label, $default) = $field;
+            $setting_id = 'mentari_pe_' . $key;
+
+            $wp_customize->add_setting($setting_id, array(
+                'default' => $default,
+                'sanitize_callback' => $sanitizers[$type],
+                'transport' => 'refresh',
+            ));
+
+            if ('image' === $type) {
+                $wp_customize->add_control(new WP_Customize_Image_Control($wp_customize, $setting_id, array(
+                    'label' => $label,
+                    'section' => 'mentari_pe_' . $section_id,
+                )));
+            } else {
+                $wp_customize->add_control($setting_id, array(
+                    'label' => $label,
+                    'section' => 'mentari_pe_' . $section_id,
+                    'type' => $type,
+                ));
+            }
+        }
+    }
+}
+add_action('customize_register', 'mentari_pe_customize_register');
