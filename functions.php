@@ -1,5 +1,7 @@
 <?php
 
+require_once __DIR__ . '/inc/internal-page-customizer.php';
+
 function mentari_school_enqueue_assets()
 {
     $theme_uri = get_template_directory_uri();
@@ -1433,6 +1435,9 @@ function mentari_document_title()
     }
     if (is_page()) {
         $slug = get_post_field('post_name', get_queried_object_id());
+        if (in_array($slug, array('admission', 'contact'), true)) {
+            return mentari_page_content($slug, 'seo_title');
+        }
         if (isset($titles[$slug])) {
             return $titles[$slug];
         }
@@ -1461,6 +1466,9 @@ function mentari_document_description()
     );
     if (is_page()) {
         $slug = get_post_field('post_name', get_queried_object_id());
+        if (in_array($slug, array('admission', 'contact'), true)) {
+            return mentari_page_content($slug, 'seo_description');
+        }
         if (!empty($descs[$slug])) {
             return $descs[$slug];
         }

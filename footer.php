@@ -8,8 +8,7 @@ $sitemap_url = mentari_footer_link_url(
     'mentari_footer_sitemap_url',
     home_url('/wp-sitemap.xml')
 );
-if (is_front_page()):
-    ?>
+?>
     <footer id="contact-footer" class="site-footer bg-dark-forest text-white pt-5 pb-4">
         <div class="container pt-lg-4 pb-3">
             <div class="row g-4 g-lg-5 mb-5">
@@ -60,17 +59,15 @@ if (is_front_page()):
                     <h5 class="footer-heading text-white fw-bold mb-3 pb-2 border-bottom border-secondary-subtle">Our
                         Campuses</h5>
                     <ul class="footer-links list-unstyled">
-                        <li><a href="#campuses"><i class="fa-solid fa-angle-right me-2 text-gold"></i> MIS Jakarta
+                        <li><a href="<?php echo esc_url(home_url('/#campuses')); ?>"><i class="fa-solid fa-angle-right me-2 text-gold"></i> MIS Jakarta
                                 (Cipete)</a></li>
-                        <li><a href="#campuses"><i class="fa-solid fa-angle-right me-2 text-gold"></i> MIS Bintaro (Sektor
+                        <li><a href="<?php echo esc_url(home_url('/#campuses')); ?>"><i class="fa-solid fa-angle-right me-2 text-gold"></i> MIS Bintaro (Sektor
                                 9)</a></li>
-                        <li><a href="#campuses"><i class="fa-solid fa-angle-right me-2 text-gold"></i> MIS Grand Surya (West
+                        <li><a href="<?php echo esc_url(home_url('/#campuses')); ?>"><i class="fa-solid fa-angle-right me-2 text-gold"></i> MIS Grand Surya (West
                                 Jkt)</a></li>
-                        <li><a href="#campuses"><i class="fa-solid fa-angle-right me-2 text-gold"></i> Mentari Preschool
+                        <li><a href="<?php echo esc_url(home_url('/#campuses')); ?>"><i class="fa-solid fa-angle-right me-2 text-gold"></i> Mentari Preschool
                                 Jakarta</a></li>
-                        <li><a href="#campuses"><i class="fa-solid fa-angle-right me-2 text-gold"></i> Sunflower
-                                Preschool</a></li>
-                        <li><a href="#campuses"><i class="fa-solid fa-angle-right me-2 text-gold"></i> Mentari Grand Surya
+                        <li><a href="<?php echo esc_url(home_url('/#campuses')); ?>"><i class="fa-solid fa-angle-right me-2 text-gold"></i> Sunflower
                                 Preschool</a></li>
                     </ul>
                 </div>
@@ -80,16 +77,16 @@ if (is_front_page()):
                     <h5 class="footer-heading text-white fw-bold mb-3 pb-2 border-bottom border-secondary-subtle">Useful
                         Links</h5>
                     <ul class="footer-links list-unstyled">
-                        <li><a href="#about"><i class="fa-solid fa-angle-right me-2 text-gold"></i> MIS Story</a></li>
-                        <li><a href="#vision"><i class="fa-solid fa-angle-right me-2 text-gold"></i> Positive Education</a>
+                        <li><a href="<?php echo esc_url(home_url('/#about')); ?>"><i class="fa-solid fa-angle-right me-2 text-gold"></i> MIS Story</a></li>
+                        <li><a href="<?php echo esc_url(home_url('/#vision')); ?>"><i class="fa-solid fa-angle-right me-2 text-gold"></i> Positive Education</a>
                         </li>
-                        <li><a href="#curricula"><i class="fa-solid fa-angle-right me-2 text-gold"></i> School Curricula</a>
+                        <li><a href="<?php echo esc_url(home_url('/#curricula')); ?>"><i class="fa-solid fa-angle-right me-2 text-gold"></i> School Curricula</a>
                         </li>
-                        <li><a href="#universities"><i class="fa-solid fa-angle-right me-2 text-gold"></i> University
+                        <li><a href="<?php echo esc_url(home_url('/#universities')); ?>"><i class="fa-solid fa-angle-right me-2 text-gold"></i> University
                                 Placements</a></li>
-                        <li><a href="#admission"><i class="fa-solid fa-angle-right me-2 text-gold"></i> MIS Online
+                        <li><a href="<?php echo esc_url(home_url('/#admission')); ?>"><i class="fa-solid fa-angle-right me-2 text-gold"></i> MIS Online
                                 Learning</a></li>
-                        <li><a href="#connect"><i class="fa-solid fa-angle-right me-2 text-gold"></i> Connect With Us</a>
+                        <li><a href="<?php echo esc_url(home_url('/#connect')); ?>"><i class="fa-solid fa-angle-right me-2 text-gold"></i> Connect With Us</a>
                         </li>
                     </ul>
                 </div>
@@ -105,7 +102,7 @@ if (is_front_page()):
                         </p>
                         <p class="mb-2"><i class="fa-solid fa-envelope text-gold me-2"></i> info@mentarischool.com</p>
                         <p class="mb-3"><i class="fa-solid fa-clock text-gold me-2"></i> Mon - Fri: 07:30 - 16:00</p>
-                        <a href="#admission" class="btn btn-sm btn-outline-light rounded-pill px-3 py-1">Inquire
+                        <a href="<?php echo esc_url(mentari_page_url('admission')); ?>" class="btn btn-sm btn-outline-light rounded-pill px-3 py-1">Inquire
                             Admission</a>
                     </div>
                 </div>
@@ -141,11 +138,6 @@ if (is_front_page()):
             </div>
         </div>
     </footer>
-<?php elseif (is_page('mis-story')): ?>
-    <?php get_template_part('template-parts/footer', 'mis-story'); ?>
-<?php else: ?>
-    <?php get_template_part('template-parts/footer', 'subpage'); ?>
-<?php endif; ?>
 
 <?php if (mentari_google_translate_is_selected()): ?>
     <div id="google_translate_element" style="display:none;"></div>
