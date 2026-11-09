@@ -1,7 +1,5 @@
 <?php
 
-require_once get_template_directory() . '/inc/internal-page-customizer.php';
-
 function mentari_school_enqueue_assets()
 {
     $theme_uri = get_template_directory_uri();
@@ -112,7 +110,6 @@ function mentari_school_customize_register($wp_customize)
         'section' => 'mentari_homepage_section',
         'settings' => 'mentari_hero_title_main',
         'type' => 'text',
-        'description' => 'Teks utama judul hero.',
     ));
 
     $wp_customize->add_setting('mentari_hero_title_highlight', array(
@@ -125,7 +122,6 @@ function mentari_school_customize_register($wp_customize)
         'section' => 'mentari_homepage_section',
         'settings' => 'mentari_hero_title_highlight',
         'type' => 'text',
-        'description' => 'Teks highlight ditampilkan dengan gaya tulisan berbeda.',
     ));
 
     // Pengaturan deskripsi hero
@@ -139,7 +135,6 @@ function mentari_school_customize_register($wp_customize)
         'section' => 'mentari_homepage_section',
         'settings' => 'mentari_main_hero_description',
         'type' => 'textarea',
-        'description' => 'Ubah deskripsi yang tampil di bawah judul utama homepage.',
     ));
 
 
@@ -1439,7 +1434,7 @@ function mentari_document_title()
     if (is_page()) {
         $slug = get_post_field('post_name', get_queried_object_id());
         if (isset($titles[$slug])) {
-            return mentari_page_content($slug, 'seo_title');
+            return $titles[$slug];
         }
     }
     return wp_get_document_title();
@@ -1467,7 +1462,7 @@ function mentari_document_description()
     if (is_page()) {
         $slug = get_post_field('post_name', get_queried_object_id());
         if (!empty($descs[$slug])) {
-            return mentari_page_content($slug, 'seo_description');
+            return $descs[$slug];
         }
     }
     return 'Mentari Intercultural School is one of the top and fastest growing international schools in Jakarta. Nurturing minds, building characters, shaping futures.';
