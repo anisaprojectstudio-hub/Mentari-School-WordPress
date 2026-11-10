@@ -393,6 +393,71 @@ function mentari_early_years_customize_register($wp_customize)
 add_action('customize_register', 'mentari_early_years_customize_register');
 
 
+<<<<<<< HEAD
+
+/*** Mentari School - MIS Bintaro Campus Customizer ***/
+
+/**
+ * Konfigurasi field halaman MIS Bintaro.
+ */
+function mentari_bintaro_sections()
+{
+    return array(
+        'hero' => array(
+            'title' => 'Hero Section',
+            'fields' => array(
+                'hero_label' => array(
+                    'text',
+                    'Hero Label',
+                    'Campus Location'
+                ),
+                'hero_title' => array(
+                    'text',
+                    'Hero Title',
+                    'MIS Bintaro'
+                ),
+                'hero_address' => array(
+                    'textarea',
+                    'Campus Address',
+                    'Jl. Bintaro Utama Sektor 9, Pondok Aren, Tangerang Selatan'
+                ),
+                'hero_badge' => array(
+                    'text',
+                    'Hero Badge',
+                    'Green Campus'
+                ),
+            ),
+        ),
+
+        'welcome' => array(
+            'title' => 'Welcome Section',
+            'fields' => array(
+                'welcome_title' => array(
+                    'text',
+                    'Welcome Title',
+                    'Welcome to MIS Bintaro'
+                ),
+                'welcome_lead' => array(
+                    'textarea',
+                    'Main Description',
+                    'An expansive, green campus serving Early Childhood, Elementary, Middle School, and High School with cutting-edge academic and sports facilities.'
+                ),
+                'welcome_description' => array(
+                    'textarea',
+                    'Additional Description',
+                    'MIS Bintaro fosters a close-knit, supportive community where students are empowered to lead, innovate, and excel in an international learning environment.'
+                ),
+                'welcome_button' => array(
+                    'text',
+                    'Button Text',
+                    'Visit MIS Bintaro'
+                ),
+                'welcome_image' => array(
+                    'image',
+                    'Campus Image',
+                    'https://images.squarespace-cdn.com/content/v1/60c9a5215a821d628e0e1c65/7d1ed6cb-ede3-4e77-b77a-1b433961e04e/11.jpg'
+                ),
+=======
 /*** Mentari School - Positive Education Page Customizer ***/
 
 /**
@@ -426,11 +491,43 @@ function mentari_pe_sections()
                 'feat2_icon' => array('text', 'Poin 2 - Class ikon Font Awesome', 'fa-solid fa-brain'),
                 'feat2_title' => array('text', 'Poin 2 - Judul', 'Character Strengths'),
                 'feat2_desc' => array('textarea', 'Poin 2 - Deskripsi', 'Helping students discover and build upon their unique innate gifts.'),
+>>>>>>> b39c8a4736dfd278fce6e0df620b1c07dfcf3798
             ),
         ),
     );
 }
 
+<<<<<<< HEAD
+
+/**
+ * Mengambil nilai Customizer MIS Bintaro.
+ */
+function mentari_bintaro($key)
+{
+    foreach (mentari_bintaro_sections() as $section) {
+        if (isset($section['fields'][$key])) {
+            $field = $section['fields'][$key];
+
+            return get_theme_mod(
+                'mentari_bintaro_' . $key,
+                $field[2]
+            );
+        }
+    }
+
+    return '';
+}
+
+
+/**
+ * Mendaftarkan Customizer MIS Bintaro.
+ */
+function mentari_bintaro_customize_register($wp_customize)
+{
+    $wp_customize->add_panel('mentari_bintaro_panel', array(
+        'title' => __('MIS Bintaro Campus', 'mentari-school'),
+        'priority' => 103,
+=======
 /** Ambil nilai satu field Positive Education (dari Customizer, atau default bila belum diubah). */
 function mentari_pe($key)
 {
@@ -452,6 +549,7 @@ function mentari_pe_customize_register($wp_customize)
     $wp_customize->add_panel('mentari_pe_panel', array(
         'title' => __('Positive Education Page', 'mentari-school'),
         'priority' => 102,
+>>>>>>> b39c8a4736dfd278fce6e0df620b1c07dfcf3798
     ));
 
     $sanitizers = array(
@@ -460,6 +558,22 @@ function mentari_pe_customize_register($wp_customize)
         'image' => 'esc_url_raw',
     );
 
+<<<<<<< HEAD
+    foreach (mentari_bintaro_sections() as $section_id => $section) {
+
+        $section_name = 'mentari_bintaro_' . $section_id;
+
+        $wp_customize->add_section($section_name, array(
+            'title' => $section['title'],
+            'panel' => 'mentari_bintaro_panel',
+        ));
+
+        foreach ($section['fields'] as $key => $field) {
+
+            list($type, $label, $default) = $field;
+
+            $setting_id = 'mentari_bintaro_' . $key;
+=======
     foreach (mentari_pe_sections() as $section_id => $section) {
         $wp_customize->add_section('mentari_pe_' . $section_id, array(
             'title' => $section['title'],
@@ -469,6 +583,7 @@ function mentari_pe_customize_register($wp_customize)
         foreach ($section['fields'] as $key => $field) {
             list($type, $label, $default) = $field;
             $setting_id = 'mentari_pe_' . $key;
+>>>>>>> b39c8a4736dfd278fce6e0df620b1c07dfcf3798
 
             $wp_customize->add_setting($setting_id, array(
                 'default' => $default,
@@ -477,6 +592,28 @@ function mentari_pe_customize_register($wp_customize)
             ));
 
             if ('image' === $type) {
+<<<<<<< HEAD
+
+                $wp_customize->add_control(
+                    new WP_Customize_Image_Control(
+                        $wp_customize,
+                        $setting_id,
+                        array(
+                            'label' => $label,
+                            'section' => $section_name,
+                        )
+                    )
+                );
+
+            } else {
+
+                $wp_customize->add_control($setting_id, array(
+                    'label' => $label,
+                    'section' => $section_name,
+                    'type' => $type,
+                ));
+
+=======
                 $wp_customize->add_control(new WP_Customize_Image_Control($wp_customize, $setting_id, array(
                     'label' => $label,
                     'section' => 'mentari_pe_' . $section_id,
@@ -487,8 +624,17 @@ function mentari_pe_customize_register($wp_customize)
                     'section' => 'mentari_pe_' . $section_id,
                     'type' => $type,
                 ));
+>>>>>>> b39c8a4736dfd278fce6e0df620b1c07dfcf3798
             }
         }
     }
 }
+<<<<<<< HEAD
+
+add_action(
+    'customize_register',
+    'mentari_bintaro_customize_register'
+);
+=======
 add_action('customize_register', 'mentari_pe_customize_register');
+>>>>>>> b39c8a4736dfd278fce6e0df620b1c07dfcf3798
