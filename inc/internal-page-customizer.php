@@ -305,6 +305,37 @@ function mentari_story_customize_register($wp_customize)
 }
 add_action('customize_register', 'mentari_story_customize_register');
 
+
+function mentari_early_years_sections()
+{
+    return array(
+        'hero' => array(
+            'title' => __('Hero Banner', 'mentari-school'),
+            'fields' => array(
+                'hero_label' => array('text', 'Label kecil', 'Early Childhood'),
+                'hero_title' => array('text', 'Judul', 'Early Years Education'),
+                'hero_desc' => array('textarea', 'Deskripsi', '“What we learn with pleasure, we never forget.” Nurturing young minds through play-based discovery.'),
+                'hero_badge' => array('text', 'Badge usia', 'Ages 2 - 5'),
+            ),
+        ),
+        'content' => array(
+            'title' => __('Konten Utama', 'mentari-school'),
+            'fields' => array(
+                'content_title' => array('text', 'Judul', 'Nurturing Natural Curiosity'),
+                'content_lead' => array('textarea', 'Paragraf utama', 'Our Early Years curriculum is a child-centered, developmental program inspired by Montessori and inquiry-based principles.'),
+                'content_text' => array('textarea', 'Paragraf kedua', 'We foster gross and fine motor skills, language acquisition, social emotional foundation, and sensory discovery in warm, safe, and stimulating spaces.'),
+                'content_btn' => array('text', 'Teks tombol', 'Apply for Early Years'),
+                'content_image' => array('image', 'Gambar', 'https://images.squarespace-cdn.com/content/v1/60c9a5215a821d628e0e1c65/1c0f3d35-d3ae-4cc5-9adc-18948a8b41a5/DSC08102.jpg'),
+                'content_image_alt' => array('text', 'Alt teks gambar', 'Early Years Classroom'),
+            ),
+        ),
+    );
+}
+
+/**
+ * Ambil nilai satu field. Dipakai di template:
+ * echo esc_html(mentari_early_years('hero_title'));
+ */
 function mentari_early_years($key)
 {
     foreach (mentari_early_years_sections() as $section) {
@@ -362,6 +393,7 @@ function mentari_early_years_customize_register($wp_customize)
 add_action('customize_register', 'mentari_early_years_customize_register');
 
 
+<<<<<<< HEAD
 
 /*** Mentari School - MIS Bintaro Campus Customizer ***/
 
@@ -425,11 +457,47 @@ function mentari_bintaro_sections()
                     'Campus Image',
                     'https://images.squarespace-cdn.com/content/v1/60c9a5215a821d628e0e1c65/7d1ed6cb-ede3-4e77-b77a-1b433961e04e/11.jpg'
                 ),
+=======
+/*** Mentari School - Positive Education Page Customizer ***/
+
+/**
+ * Definisi semua field halaman Positive Education.
+ * Format: section => array(title, fields => array(key => array(type, label, default)))
+ * type: text | textarea | image
+ */
+function mentari_pe_sections()
+{
+    return array(
+        'hero' => array(
+            'title' => 'Hero',
+            'fields' => array(
+                'hero_label' => array('text', 'Label kecil', 'School Culture'),
+                'hero_title' => array('text', 'Judul', 'Positive Education at MIS'),
+                'hero_desc' => array('textarea', 'Deskripsi', 'Shaping students to thrive academically and personally in a deeply supportive and nurturing environment.'),
+                'hero_badge' => array('text', 'Teks badge', 'PERMAH Wellbeing Framework'),
+            ),
+        ),
+        'framework' => array(
+            'title' => 'Wellbeing Framework',
+            'fields' => array(
+                'fw_label' => array('text', 'Label kecil', 'Wellbeing Framework'),
+                'fw_title' => array('text', 'Judul', 'Curiosity at the Heart of Learning'),
+                'fw_lead' => array('textarea', 'Paragraf utama', 'Positive Education brings together the science of positive psychology with best practice teaching to encourage individuals, schools, and communities to flourish.'),
+                'fw_text' => array('textarea', 'Paragraf kedua', 'At MIS, we embed the PERMAH framework (Positive Emotion, Engagement, Relationships, Meaning, Accomplishment, and Health) throughout our daily school life. When students feel psychologically safe and valued, their cognitive capacity and creative problem-solving thrive.'),
+                'fw_image' => array('image', 'Gambar', 'https://images.squarespace-cdn.com/content/v1/60c9a5215a821d628e0e1c65/72228bbc-8e5a-4a15-81fb-105f3a73bd50/Teaching+103.jpg'),
+                'feat1_icon' => array('text', 'Poin 1 - Class ikon Font Awesome', 'fa-solid fa-heart'),
+                'feat1_title' => array('text', 'Poin 1 - Judul', 'Emotional Well-being'),
+                'feat1_desc' => array('textarea', 'Poin 1 - Deskripsi', 'Cultivating resilience, gratitude, and empathy in everyday interactions.'),
+                'feat2_icon' => array('text', 'Poin 2 - Class ikon Font Awesome', 'fa-solid fa-brain'),
+                'feat2_title' => array('text', 'Poin 2 - Judul', 'Character Strengths'),
+                'feat2_desc' => array('textarea', 'Poin 2 - Deskripsi', 'Helping students discover and build upon their unique innate gifts.'),
+>>>>>>> b39c8a4736dfd278fce6e0df620b1c07dfcf3798
             ),
         ),
     );
 }
 
+<<<<<<< HEAD
 
 /**
  * Mengambil nilai Customizer MIS Bintaro.
@@ -459,6 +527,29 @@ function mentari_bintaro_customize_register($wp_customize)
     $wp_customize->add_panel('mentari_bintaro_panel', array(
         'title' => __('MIS Bintaro Campus', 'mentari-school'),
         'priority' => 103,
+=======
+/** Ambil nilai satu field Positive Education (dari Customizer, atau default bila belum diubah). */
+function mentari_pe($key)
+{
+    static $defaults = null;
+    if (null === $defaults) {
+        $defaults = array();
+        foreach (mentari_pe_sections() as $section) {
+            foreach ($section['fields'] as $field_key => $field) {
+                $defaults[$field_key] = $field[2];
+            }
+        }
+    }
+    $default = isset($defaults[$key]) ? $defaults[$key] : '';
+    return get_theme_mod('mentari_pe_' . $key, $default);
+}
+
+function mentari_pe_customize_register($wp_customize)
+{
+    $wp_customize->add_panel('mentari_pe_panel', array(
+        'title' => __('Positive Education Page', 'mentari-school'),
+        'priority' => 102,
+>>>>>>> b39c8a4736dfd278fce6e0df620b1c07dfcf3798
     ));
 
     $sanitizers = array(
@@ -467,6 +558,7 @@ function mentari_bintaro_customize_register($wp_customize)
         'image' => 'esc_url_raw',
     );
 
+<<<<<<< HEAD
     foreach (mentari_bintaro_sections() as $section_id => $section) {
 
         $section_name = 'mentari_bintaro_' . $section_id;
@@ -481,6 +573,17 @@ function mentari_bintaro_customize_register($wp_customize)
             list($type, $label, $default) = $field;
 
             $setting_id = 'mentari_bintaro_' . $key;
+=======
+    foreach (mentari_pe_sections() as $section_id => $section) {
+        $wp_customize->add_section('mentari_pe_' . $section_id, array(
+            'title' => $section['title'],
+            'panel' => 'mentari_pe_panel',
+        ));
+
+        foreach ($section['fields'] as $key => $field) {
+            list($type, $label, $default) = $field;
+            $setting_id = 'mentari_pe_' . $key;
+>>>>>>> b39c8a4736dfd278fce6e0df620b1c07dfcf3798
 
             $wp_customize->add_setting($setting_id, array(
                 'default' => $default,
@@ -489,6 +592,7 @@ function mentari_bintaro_customize_register($wp_customize)
             ));
 
             if ('image' === $type) {
+<<<<<<< HEAD
 
                 $wp_customize->add_control(
                     new WP_Customize_Image_Control(
@@ -509,12 +613,28 @@ function mentari_bintaro_customize_register($wp_customize)
                     'type' => $type,
                 ));
 
+=======
+                $wp_customize->add_control(new WP_Customize_Image_Control($wp_customize, $setting_id, array(
+                    'label' => $label,
+                    'section' => 'mentari_pe_' . $section_id,
+                )));
+            } else {
+                $wp_customize->add_control($setting_id, array(
+                    'label' => $label,
+                    'section' => 'mentari_pe_' . $section_id,
+                    'type' => $type,
+                ));
+>>>>>>> b39c8a4736dfd278fce6e0df620b1c07dfcf3798
             }
         }
     }
 }
+<<<<<<< HEAD
 
 add_action(
     'customize_register',
     'mentari_bintaro_customize_register'
 );
+=======
+add_action('customize_register', 'mentari_pe_customize_register');
+>>>>>>> b39c8a4736dfd278fce6e0df620b1c07dfcf3798

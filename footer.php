@@ -1,4 +1,9 @@
 <?php
+if (is_page('mis-story')) {
+    get_template_part('template-parts/footer', 'mis-story');
+} elseif (is_page() && !is_front_page()) {
+    get_template_part('template-parts/footer', 'subpage');
+} else {
 $privacy_url = mentari_footer_link_url(
     'mentari_footer_privacy_url',
     function_exists('get_privacy_policy_url') ? get_privacy_policy_url() : ''
@@ -138,6 +143,7 @@ $sitemap_url = mentari_footer_link_url(
             </div>
         </div>
     </footer>
+<?php } ?>
 
 <?php if (mentari_google_translate_is_selected()): ?>
     <div id="google_translate_element" style="display:none;"></div>
