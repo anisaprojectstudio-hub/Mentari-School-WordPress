@@ -894,19 +894,20 @@ get_header(); ?>
             <!-- Instagram Feed 4x2 Grid -->
             <div class="row g-3 g-lg-4 instagram-grid" id="instagram-feed-container">
 
+                <?php $instagram_post_defaults = mentari_school_get_instagram_post_defaults(); ?>
                 <?php for ($i = 1; $i <= 8; $i++):
 
                     $post_id = 'mentari_instagram_post_' . $i;
+                    $post_defaults = $instagram_post_defaults[$i];
 
-                    $image = get_theme_mod($post_id . '_image', '');
-                    $alt = get_theme_mod($post_id . '_alt', '');
-                    $type = get_theme_mod($post_id . '_type', 'image');
-                    $likes = absint(get_theme_mod($post_id . '_likes', 0));
-                    $comments = absint(get_theme_mod($post_id . '_comments', 0));
-
-                    if (empty($image)) {
-                        continue;
+                    $image = get_theme_mod($post_id . '_image', get_theme_file_uri($post_defaults['image']));
+                    if (strpos($image, 'images/') === 0) {
+                        $image = get_theme_file_uri($image);
                     }
+                    $alt = get_theme_mod($post_id . '_alt', $post_defaults['alt']);
+                    $type = get_theme_mod($post_id . '_type', $post_defaults['type']);
+                    $likes = absint(get_theme_mod($post_id . '_likes', $post_defaults['likes']));
+                    $comments = absint(get_theme_mod($post_id . '_comments', $post_defaults['comments']));
 
                     $is_video = ($type === 'video');
                     ?>
