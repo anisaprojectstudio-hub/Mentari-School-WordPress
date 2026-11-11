@@ -8,6 +8,7 @@ template.
 
 - [Persyaratan](#persyaratan)
 - [Instalasi lokal dengan LocalWP](#instalasi-lokal-dengan-localwp)
+- [Backend](#backend)
 - [Mengedit konten melalui Customizer](#mengedit-konten-melalui-customizer)
 - [Struktur panel dan halaman](#struktur-panel-dan-halaman)
 - [Cara kerja pengaturan konten](#cara-kerja-pengaturan-konten)
@@ -32,6 +33,20 @@ template.
 > Perubahan di folder repository tidak otomatis tersalin ke folder instalasi
 > LocalWP jika keduanya merupakan salinan terpisah. Pastikan file terbaru berada
 > di direktori tema yang sedang aktif.
+
+## Backend
+
+Project ini menggunakan **WordPress sebagai backend**; tema ini bukan aplikasi
+frontend yang berdiri sendiri. WordPress menyediakan Dashboard untuk mengelola
+situs dan database untuk menyimpan konten serta pengaturan. Konten yang
+dikonfigurasi melalui Customizer tema ini disimpan sebagai `theme_mod` di
+database WordPress dan dibaca oleh template tema untuk ditampilkan pada halaman.
+
+Untuk kebutuhan saat ini, pengelolaan konten yang dijelaskan dalam README
+dilakukan melalui **Appearance/Tampilan → Customize/Sesuaikan**. Fitur backend
+lain, seperti penyimpanan data formulir pendaftaran atau integrasi API, perlu
+ditambahkan dan dikonfigurasi secara terpisah—misalnya melalui plugin atau
+kustomisasi WordPress.
 
 ## Mengedit konten melalui Customizer
 
