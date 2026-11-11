@@ -88,6 +88,68 @@ function mentari_enqueue_google_translate()
 add_action('wp_enqueue_scripts', 'mentari_enqueue_google_translate', 20);
 
 /*** Mentari School - Homepage Customizer ***/
+function mentari_school_get_instagram_post_defaults()
+{
+    return array(
+        1 => array(
+            'image' => 'images/A little look back at our Open House at MISB E. We honestly didn’t expect to welcome so many familie_kkfin.jpg',
+            'alt' => 'MISB Open House',
+            'type' => 'video',
+            'likes' => 482,
+            'comments' => 34,
+        ),
+        2 => array(
+            'image' => 'images/From late nights and challenging lessons to moments of doubt and determination—today, we celebrate t_ggwp3.jpg',
+            'alt' => 'Student Growth and Dedication',
+            'type' => 'image',
+            'likes' => 619,
+            'comments' => 41,
+        ),
+        3 => array(
+            'image' => 'images/What a day! Our MISJ High School Open House brought together so many wonderful families who took the_12z9z.jpg',
+            'alt' => 'MISJ High School Open House',
+            'type' => 'video',
+            'likes' => 530,
+            'comments' => 29,
+        ),
+        4 => array(
+            'image' => 'images/🌋 It’s not just dust. It’s a flight risk. ✈️ Why can volcanic ash stop planes from flying Swipe th_riojx.jpg',
+            'alt' => 'Volcanic Ash Aviation Safety',
+            'type' => 'image',
+            'likes' => 395,
+            'comments' => 18,
+        ),
+        5 => array(
+            'image' => 'images/A little look back. 💙 From conversations with families to curious questions, classroom visits, and_fmxn2.jpg',
+            'alt' => 'Family Connections at MIS',
+            'type' => 'image',
+            'likes' => 477,
+            'comments' => 22,
+        ),
+        6 => array(
+            'image' => 'images/🌋 PARENT REMINDER VOLCANIC ASHFALL Following the recent eruption of Anak Krakatau, volcanic ash h_hgd9z.jpg',
+            'alt' => 'Parent Advisory & Safety',
+            'type' => 'image',
+            'likes' => 734,
+            'comments' => 56,
+        ),
+        7 => array(
+            'image' => 'images/A little look back at our MISB High School Open House. 💙✨ A day filled with meaningful conversation_u5yhm.jpg',
+            'alt' => 'MISB High School Highlights',
+            'type' => 'image',
+            'likes' => 890,
+            'comments' => 64,
+        ),
+        8 => array(
+            'image' => 'images/A day of connection, discovery, and new possibilities. 💚 Last Saturday, we welcomed families to the_673mg.jpg',
+            'alt' => 'Meaningful Learning at MIS',
+            'type' => 'video',
+            'likes' => 912,
+            'comments' => 78,
+        ),
+    );
+}
+
 function mentari_school_customize_register($wp_customize)
 {
     $wp_customize->add_panel('mentari_homepage_panel', array(
@@ -1084,64 +1146,7 @@ function mentari_school_customize_register($wp_customize)
     }
 
     // Instagram Post Defaults
-    $instagram_posts = array(
-        1 => array(
-            'image' => 'https://images.squarespace-cdn.com/content/v1/60c9a5215a821d628e0e1c65/1789437082356-1T76DOEKUFJ24H4L6595/image-asset.jpeg',
-            'alt' => 'MISB Open House',
-            'type' => 'video',
-            'likes' => 482,
-            'comments' => 34,
-        ),
-        2 => array(
-            'image' => 'https://images.squarespace-cdn.com/content/v1/60c9a5215a821d628e0e1c65/1789363222011-RU4WYX598YMBL2CYVYZI/image-asset.jpeg',
-            'alt' => 'Student Growth and Dedication',
-            'type' => 'image',
-            'likes' => 619,
-            'comments' => 41,
-        ),
-        3 => array(
-            'image' => 'https://images.squarespace-cdn.com/content/v1/60c9a5215a821d628e0e1c65/1788998088160-DHO2Q411J95RAFX309A5/image-asset.jpeg',
-            'alt' => 'MISJ High School Open House',
-            'type' => 'video',
-            'likes' => 530,
-            'comments' => 29,
-        ),
-        4 => array(
-            'image' => 'https://images.squarespace-cdn.com/content/v1/60c9a5215a821d628e0e1c65/1788855855131-TK6ACL7F6YHVG26S7NEK/image-asset.jpeg',
-            'alt' => 'Volcanic Ash Aviation Safety',
-            'type' => 'image',
-            'likes' => 395,
-            'comments' => 18,
-        ),
-        5 => array(
-            'image' => 'https://images.squarespace-cdn.com/content/v1/60c9a5215a821d628e0e1c65/1788765614909-PXRI9XVVLVJKA1NWG65I/image-asset.jpeg',
-            'alt' => 'Family Connections at MIS',
-            'type' => 'image',
-            'likes' => 477,
-            'comments' => 22,
-        ),
-        6 => array(
-            'image' => 'https://images.squarespace-cdn.com/content/v1/60c9a5215a821d628e0e1c65/1788666531002-570FOPJGWMRGHCZB7GH6/image-asset.jpeg',
-            'alt' => 'Parent Advisory & Safety',
-            'type' => 'image',
-            'likes' => 734,
-            'comments' => 56,
-        ),
-        7 => array(
-            'image' => 'https://images.squarespace-cdn.com/content/v1/60c9a5215a821d628e0e1c65/1788495446904-9UF2KKGFW0PZIJPHHERO/image-asset.jpeg',
-            'alt' => 'MISB High School Highlights',
-            'type' => 'image',
-            'likes' => 890,
-            'comments' => 64,
-        ),
-        8 => array(
-            'image' => 'https://images.squarespace-cdn.com/content/v1/60c9a5215a821d628e0e1c65/1788254315180-FY5WBVO0V35KZP5ZR2RI/image-asset.jpeg',
-            'alt' => 'Meaningful Learning at MIS',
-            'type' => 'video',
-            'likes' => 912,
-            'comments' => 78,
-        ),
-    );
+    $instagram_posts = mentari_school_get_instagram_post_defaults();
 
     // Individual Instagram Post Controls
     foreach ($instagram_posts as $post_number => $post) {
@@ -1149,7 +1154,7 @@ function mentari_school_customize_register($wp_customize)
         $image_setting = 'mentari_instagram_post_' . $post_number . '_image';
 
         $wp_customize->add_setting($image_setting, array(
-            'default' => $post['image'],
+            'default' => get_theme_file_uri($post['image']),
             'sanitize_callback' => 'esc_url_raw',
         ));
 

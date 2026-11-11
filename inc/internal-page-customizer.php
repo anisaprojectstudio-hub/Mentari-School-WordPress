@@ -161,6 +161,74 @@ add_action('customize_register', 'mentari_register_internal_pages_customizer', 2
 
 function mentari_page_content($slug, $field_id)
 {
+    if ('mis-jakarta' === $slug) {
+        return mentari_jakarta_content($field_id);
+    }
+
+    if ('mis-bintaro' === $slug) {
+        return mentari_bintaro_content($field_id);
+    }
+
+    if ('mentari-preschool' === $slug) {
+        $preschool_fields = array(
+            'hero_label' => 'hero_label',
+            'hero_title' => 'hero_title',
+            'hero_description' => 'hero_desc',
+            'hero_badge' => 'hero_badge',
+            'campus_title' => 'content_title',
+            'campus_paragraph_1' => 'content_lead',
+            'campus_paragraph_2' => 'content_text',
+            'cta_url' => 'cta_url',
+            'cta_text' => 'content_btn',
+            'campus_image' => 'content_image',
+            'campus_image_alt' => 'content_image_alt',
+        );
+
+        if (isset($preschool_fields[$field_id])) {
+            return mentari_preschool($preschool_fields[$field_id]);
+        }
+    }
+
+    if ('mis-grand-surya' === $slug) {
+        $grand_surya_fields = array(
+            'hero_label' => 'hero_label',
+            'hero_title' => 'hero_title',
+            'hero_description' => 'hero_desc',
+            'hero_badge' => 'hero_badge',
+            'campus_title' => 'about_title',
+            'campus_paragraph_1' => 'about_lead',
+            'campus_paragraph_2' => 'about_text',
+            'cta_url' => 'about_url',
+            'cta_text' => 'about_btn',
+            'campus_image' => 'about_image',
+            'campus_image_alt' => 'about_image_alt',
+        );
+
+        if (isset($grand_surya_fields[$field_id])) {
+            return mentari_grand_surya($grand_surya_fields[$field_id]);
+        }
+    }
+
+    if ('sunflower-preschool' === $slug) {
+        $sunflower_fields = array(
+            'hero_label' => 'hero_label',
+            'hero_title' => 'hero_title',
+            'hero_description' => 'hero_desc',
+            'hero_badge' => 'hero_badge',
+            'campus_title' => 'content_title',
+            'campus_paragraph_1' => 'content_lead',
+            'campus_paragraph_2' => 'content_text',
+            'cta_url' => 'content_url',
+            'cta_text' => 'content_btn',
+            'campus_image' => 'content_image',
+            'campus_image_alt' => 'content_image_alt',
+        );
+
+        if (isset($sunflower_fields[$field_id])) {
+            return mentari_sunflower($sunflower_fields[$field_id]);
+        }
+    }
+
     $pages = mentari_internal_pages_config();
 
     if (!isset($pages[$slug]['fields'][$field_id])) {
@@ -493,6 +561,7 @@ function mentari_pe_customize_register($wp_customize)
 }
 add_action('customize_register', 'mentari_pe_customize_register');
 
+<<<<<<< HEAD
 
 function mentari_elementary_sections()
 {
@@ -515,11 +584,41 @@ function mentari_elementary_sections()
                 'content_btn' => array('text', 'Teks tombol', 'Elementary Admission'),
                 'content_image' => array('image', 'Gambar', 'https://images.squarespace-cdn.com/content/v1/60c9a5215a821d628e0e1c65/5837a716-b51d-4b88-966d-863b64140333/Elementary+7.png'),
                 'content_image_alt' => array('text', 'Alt teks gambar', 'Elementary School'),
+=======
+/*** Mentari School - High School Page Customizer ***/
+
+/**
+ * Definisi semua field halaman High School.
+ * Format: section => array(title, fields => array(key => array(type, label, default)))
+ * type: text | textarea | image
+ */
+function mentari_hs_sections()
+{
+    return array(
+        'hero' => array(
+            'title' => 'Hero',
+            'fields' => array(
+                'hero_label' => array('text', 'Label kecil', 'Diploma Pathway'),
+                'hero_title' => array('text', 'Judul', 'Senior High School'),
+                'hero_desc' => array('textarea', 'Deskripsi', 'Cambridge IGCSE & IB Diploma Programme (DP) — The premier gateway to world-renowned universities.'),
+                'hero_badge' => array('text', 'Teks badge', 'Grades 9 - 12'),
+            ),
+        ),
+        'main' => array(
+            'title' => 'Program Overview',
+            'fields' => array(
+                'main_title' => array('text', 'Judul', 'Excellence in IB Diploma & IGCSE'),
+                'main_lead' => array('textarea', 'Paragraf utama', 'MIS High School students consistently achieve world-class scores in the IB Diploma examinations, with average scores well above global averages.'),
+                'main_text' => array('textarea', 'Paragraf kedua', 'Our curriculum emphasizes rigorous academics, Creativity, Activity, Service (CAS), Theory of Knowledge (TOK), and a 4,000-word Extended Essay that thoroughly prepares students for university-level research.'),
+                'main_button' => array('text', 'Teks tombol (ke Admission)', 'Apply for High School'),
+                'main_image' => array('image', 'Gambar', 'https://images.squarespace-cdn.com/content/v1/60c9a5215a821d628e0e1c65/1576ef94-cf1a-4ef4-86e4-2411b5967bb8/High+School+2.jpg'),
+>>>>>>> beac6b8b8f93cbd0ad8cb9c3d03d52ea349d94f5
             ),
         ),
     );
 }
 
+<<<<<<< HEAD
 /**
  * Ambil nilai satu field. Dipakai di template:
  * echo esc_html(mentari_elementary('hero_title'));
@@ -538,6 +637,28 @@ function mentari_elementary_customize_register($wp_customize)
 {
     $wp_customize->add_panel('mentari_elementary_panel', array(
         'title' => __('Elementary Page', 'mentari-school'),
+=======
+/** Ambil nilai satu field High School (dari Customizer, atau default bila belum diubah). */
+function mentari_hs($key)
+{
+    static $defaults = null;
+    if (null === $defaults) {
+        $defaults = array();
+        foreach (mentari_hs_sections() as $section) {
+            foreach ($section['fields'] as $field_key => $field) {
+                $defaults[$field_key] = $field[2];
+            }
+        }
+    }
+    $default = isset($defaults[$key]) ? $defaults[$key] : '';
+    return get_theme_mod('mentari_hs_' . $key, $default);
+}
+
+function mentari_hs_customize_register($wp_customize)
+{
+    $wp_customize->add_panel('mentari_hs_panel', array(
+        'title' => __('High School Page', 'mentari-school'),
+>>>>>>> beac6b8b8f93cbd0ad8cb9c3d03d52ea349d94f5
         'priority' => 103,
     ));
 
@@ -547,15 +668,26 @@ function mentari_elementary_customize_register($wp_customize)
         'image' => 'esc_url_raw',
     );
 
+<<<<<<< HEAD
     foreach (mentari_elementary_sections() as $section_id => $section) {
         $wp_customize->add_section('mentari_elementary_' . $section_id, array(
             'title' => $section['title'],
             'panel' => 'mentari_elementary_panel',
+=======
+    foreach (mentari_hs_sections() as $section_id => $section) {
+        $wp_customize->add_section('mentari_hs_' . $section_id, array(
+            'title' => $section['title'],
+            'panel' => 'mentari_hs_panel',
+>>>>>>> beac6b8b8f93cbd0ad8cb9c3d03d52ea349d94f5
         ));
 
         foreach ($section['fields'] as $key => $field) {
             list($type, $label, $default) = $field;
+<<<<<<< HEAD
             $setting_id = 'mentari_elementary_' . $key;
+=======
+            $setting_id = 'mentari_hs_' . $key;
+>>>>>>> beac6b8b8f93cbd0ad8cb9c3d03d52ea349d94f5
 
             $wp_customize->add_setting($setting_id, array(
                 'default' => $default,
@@ -566,18 +698,27 @@ function mentari_elementary_customize_register($wp_customize)
             if ('image' === $type) {
                 $wp_customize->add_control(new WP_Customize_Image_Control($wp_customize, $setting_id, array(
                     'label' => $label,
+<<<<<<< HEAD
                     'section' => 'mentari_elementary_' . $section_id,
+=======
+                    'section' => 'mentari_hs_' . $section_id,
+>>>>>>> beac6b8b8f93cbd0ad8cb9c3d03d52ea349d94f5
                 )));
             } else {
                 $wp_customize->add_control($setting_id, array(
                     'label' => $label,
+<<<<<<< HEAD
                     'section' => 'mentari_elementary_' . $section_id,
+=======
+                    'section' => 'mentari_hs_' . $section_id,
+>>>>>>> beac6b8b8f93cbd0ad8cb9c3d03d52ea349d94f5
                     'type' => $type,
                 ));
             }
         }
     }
 }
+<<<<<<< HEAD
 add_action('customize_register', 'mentari_elementary_customize_register');
 
 
@@ -602,11 +743,45 @@ function mentari_middle_school_sections()
                 'content_btn' => array('text', 'Teks tombol', 'Middle School Admission'),
                 'content_image' => array('image', 'Gambar', 'https://images.squarespace-cdn.com/content/v1/60c9a5215a821d628e0e1c65/7530af28-f093-4e25-8353-e17589919861/School+Curricula+-+JHS+45_2.jpg'),
                 'content_image_alt' => array('text', 'Alt teks gambar', 'Middle School'),
+=======
+add_action('customize_register', 'mentari_hs_customize_register');
+
+/*** Mentari School - University Counseling Page Customizer ***/
+
+/**
+ * Definisi semua field halaman University Counseling.
+ * Format: section => array(title, fields => array(key => array(type, label, default)))
+ * type: text | textarea | image
+ */
+function mentari_uc_sections()
+{
+    return array(
+        'hero' => array(
+            'title' => 'Hero',
+            'fields' => array(
+                'hero_label' => array('text', 'Label kecil', 'College Pathways'),
+                'hero_title' => array('text', 'Judul', 'University Counseling'),
+                'hero_desc' => array('textarea', 'Deskripsi', 'Empowering our graduates to gain acceptance into the world’s most prestigious universities.'),
+                'hero_badge' => array('text', 'Teks badge', 'Top 100 Global Unis'),
+            ),
+        ),
+        'main' => array(
+            'title' => 'Guidance Overview',
+            'fields' => array(
+                'main_title' => array('text', 'Judul', 'Personalized Higher Education Guidance'),
+                'main_lead' => array('textarea', 'Paragraf utama', 'Our dedicated University Counseling Office assists students individually from Grade 9 onward in goal-setting, portfolio building, and standardized test preparation.'),
+                'item1' => array('text', 'Poin 1', '1-on-1 college admissions advisory & career profiling'),
+                'item2' => array('text', 'Poin 2', 'Essay workshops, interview simulation & recommendation letters'),
+                'item3' => array('text', 'Poin 3 (kosongkan untuk menyembunyikan)', 'Annual MIS International University Fairs with 70+ global universities'),
+                'main_button' => array('text', 'Teks tombol (ke Contact)', 'Book a Counseling Session'),
+                'main_image' => array('image', 'Gambar', 'https://images.squarespace-cdn.com/content/v1/60c9a5215a821d628e0e1c65/8f65bfce-676a-43d1-a0f6-17db6974c471/Screenshot+2025-07-30+at+10.25.50.png'),
+>>>>>>> beac6b8b8f93cbd0ad8cb9c3d03d52ea349d94f5
             ),
         ),
     );
 }
 
+<<<<<<< HEAD
 /**
  * Ambil nilai satu field. Dipakai di template:
  * echo esc_html(mentari_middle_school('hero_title'));
@@ -625,6 +800,28 @@ function mentari_middle_school_customize_register($wp_customize)
 {
     $wp_customize->add_panel('mentari_middle_school_panel', array(
         'title' => __('Middle School Page', 'mentari-school'),
+=======
+/** Ambil nilai satu field University Counseling (dari Customizer, atau default bila belum diubah). */
+function mentari_uc($key)
+{
+    static $defaults = null;
+    if (null === $defaults) {
+        $defaults = array();
+        foreach (mentari_uc_sections() as $section) {
+            foreach ($section['fields'] as $field_key => $field) {
+                $defaults[$field_key] = $field[2];
+            }
+        }
+    }
+    $default = isset($defaults[$key]) ? $defaults[$key] : '';
+    return get_theme_mod('mentari_uc_' . $key, $default);
+}
+
+function mentari_uc_customize_register($wp_customize)
+{
+    $wp_customize->add_panel('mentari_uc_panel', array(
+        'title' => __('University Counseling Page', 'mentari-school'),
+>>>>>>> beac6b8b8f93cbd0ad8cb9c3d03d52ea349d94f5
         'priority' => 104,
     ));
 
@@ -634,15 +831,26 @@ function mentari_middle_school_customize_register($wp_customize)
         'image' => 'esc_url_raw',
     );
 
+<<<<<<< HEAD
     foreach (mentari_middle_school_sections() as $section_id => $section) {
         $wp_customize->add_section('mentari_middle_school_' . $section_id, array(
             'title' => $section['title'],
             'panel' => 'mentari_middle_school_panel',
+=======
+    foreach (mentari_uc_sections() as $section_id => $section) {
+        $wp_customize->add_section('mentari_uc_' . $section_id, array(
+            'title' => $section['title'],
+            'panel' => 'mentari_uc_panel',
+>>>>>>> beac6b8b8f93cbd0ad8cb9c3d03d52ea349d94f5
         ));
 
         foreach ($section['fields'] as $key => $field) {
             list($type, $label, $default) = $field;
+<<<<<<< HEAD
             $setting_id = 'mentari_middle_school_' . $key;
+=======
+            $setting_id = 'mentari_uc_' . $key;
+>>>>>>> beac6b8b8f93cbd0ad8cb9c3d03d52ea349d94f5
 
             $wp_customize->add_setting($setting_id, array(
                 'default' => $default,
@@ -653,16 +861,622 @@ function mentari_middle_school_customize_register($wp_customize)
             if ('image' === $type) {
                 $wp_customize->add_control(new WP_Customize_Image_Control($wp_customize, $setting_id, array(
                     'label' => $label,
+<<<<<<< HEAD
                     'section' => 'mentari_middle_school_' . $section_id,
+=======
+                    'section' => 'mentari_uc_' . $section_id,
+>>>>>>> beac6b8b8f93cbd0ad8cb9c3d03d52ea349d94f5
                 )));
             } else {
                 $wp_customize->add_control($setting_id, array(
                     'label' => $label,
+<<<<<<< HEAD
                     'section' => 'mentari_middle_school_' . $section_id,
+=======
+                    'section' => 'mentari_uc_' . $section_id,
+>>>>>>> beac6b8b8f93cbd0ad8cb9c3d03d52ea349d94f5
                     'type' => $type,
                 ));
             }
         }
     }
 }
+<<<<<<< HEAD
 add_action('customize_register', 'mentari_middle_school_customize_register');
+=======
+add_action('customize_register', 'mentari_uc_customize_register');
+
+/**
+ * MIS Jakarta Campus Customizer
+ */
+
+/**
+ * Konfigurasi field MIS Jakarta
+ */
+function mentari_jakarta_sections()
+{
+    return array(
+
+        // HERO SECTION
+        'hero_label' => array(
+            'label'   => 'Hero Label',
+            'default' => 'Campus Location',
+            'type'    => 'text',
+        ),
+
+        'hero_title' => array(
+            'label'   => 'Hero Title',
+            'default' => 'MIS Jakarta (Cipete)',
+            'type'    => 'text',
+        ),
+
+        'hero_description' => array(
+            'label'   => 'Hero Description',
+            'default' => 'Jl. H. Jian No. 2, Cipete Utara, Kebayoran Baru, Jakarta Selatan 12150',
+            'type'    => 'textarea',
+        ),
+
+        'hero_badge' => array(
+            'label'   => 'Hero Badge',
+            'default' => 'Flagship Campus',
+            'type'    => 'text',
+        ),
+
+        // CAMPUS SECTION
+        'campus_title' => array(
+            'label'   => 'Campus Title',
+            'default' => 'Welcome to MIS Jakarta',
+            'type'    => 'text',
+        ),
+
+        'campus_paragraph_1' => array(
+            'label'   => 'Campus Paragraph 1',
+            'default' => 'Our founding international campus in Cipete offers complete educational levels from Elementary through Senior High School.',
+            'type'    => 'textarea',
+        ),
+
+        'campus_paragraph_2' => array(
+            'label'   => 'Campus Paragraph 2',
+            'default' => 'Equipped with science laboratories, design technology labs, indoor sports complex, Olympic swimming pool, performing arts auditorium, and rich library facilities.',
+            'type'    => 'textarea',
+        ),
+
+        // CAMPUS IMAGE
+        'campus_image' => array(
+            'label'   => 'Campus Image',
+            'default' => 'https://images.squarespace-cdn.com/content/v1/60c9a5215a821d628e0e1c65/55ef63c0-1f26-4ef8-aacc-43a4fe82b0c4/DJI_0855.JPG',
+            'type'    => 'image',
+        ),
+
+        'campus_image_alt' => array(
+            'label'   => 'Campus Image Alt',
+            'default' => 'MIS Jakarta Campus',
+            'type'    => 'text',
+        ),
+
+        // BUTTON
+        'cta_text' => array(
+            'label'   => 'Button Text',
+            'default' => 'Schedule Campus Tour',
+            'type'    => 'text',
+        ),
+
+        'cta_url' => array(
+            'label'   => 'Button URL',
+            'default' => home_url('/contact/'),
+            'type'    => 'url',
+        ),
+
+    );
+}
+
+
+
+
+/**
+ * MIS Bintaro Campus Customizer
+ */
+function mentari_bintaro_sections()
+{
+    return array(
+        'hero_label' => array(
+            'label'   => 'Hero Label',
+            'default' => 'Campus Location',
+            'type'    => 'text',
+        ),
+        'hero_title' => array(
+            'label'   => 'Hero Title',
+            'default' => 'MIS Bintaro',
+            'type'    => 'text',
+        ),
+        'hero_description' => array(
+            'label'   => 'Hero Description',
+            'default' => 'Jl. Bintaro Utama Sektor 9, Pondok Aren, Tangerang Selatan',
+            'type'    => 'textarea',
+        ),
+        'hero_badge' => array(
+            'label'   => 'Hero Badge',
+            'default' => 'Green Campus',
+            'type'    => 'text',
+        ),
+        'campus_title' => array(
+            'label'   => 'Campus Title',
+            'default' => 'Welcome to MIS Bintaro',
+            'type'    => 'text',
+        ),
+        'campus_paragraph_1' => array(
+            'label'   => 'Campus Paragraph 1',
+            'default' => 'An expansive, green campus serving Early Childhood, Elementary, Middle School, and High School with cutting-edge academic and sports facilities.',
+            'type'    => 'textarea',
+        ),
+        'campus_paragraph_2' => array(
+            'label'   => 'Campus Paragraph 2',
+            'default' => 'MIS Bintaro fosters a close-knit, supportive community where students are empowered to lead, innovate, and excel in an international learning environment.',
+            'type'    => 'textarea',
+        ),
+        'campus_image' => array(
+            'label'   => 'Campus Image',
+            'default' => 'https://images.squarespace-cdn.com/content/v1/60c9a5215a821d628e0e1c65/7d1ed6cb-ede3-4e77-b77a-1b433961e04e/11.jpg',
+            'type'    => 'image',
+        ),
+        'campus_image_alt' => array(
+            'label'   => 'Campus Image Alt',
+            'default' => 'MIS Bintaro Campus',
+            'type'    => 'text',
+        ),
+        'cta_text' => array(
+            'label'   => 'Button Text',
+            'default' => 'Visit MIS Bintaro',
+            'type'    => 'text',
+        ),
+        'cta_url' => array(
+            'label'   => 'Button URL',
+            'default' => home_url('/contact/'),
+            'type'    => 'url',
+        ),
+    );
+}
+
+function mentari_bintaro_customizer($wp_customize)
+{
+    $section_id = 'mentari_bintaro_section';
+
+    $wp_customize->add_section($section_id, array(
+        'title'       => 'MIS Bintaro Campus',
+        'priority'    => 36,
+        'description' => 'Edit content halaman MIS Bintaro Campus.',
+    ));
+
+    foreach (mentari_bintaro_sections() as $key => $field) {
+        $setting_id = 'mentari_bintaro_' . $key;
+
+        $wp_customize->add_setting($setting_id, array(
+            'default'           => 'image' === $field['type'] ? 0 : $field['default'],
+            'sanitize_callback' => (
+                'url' === $field['type']
+                    ? 'esc_url_raw'
+                    : ('image' === $field['type']
+                        ? 'absint'
+                        : ('textarea' === $field['type']
+                            ? 'sanitize_textarea_field'
+                            : 'sanitize_text_field'))
+            ),
+            'transport' => 'refresh',
+        ));
+
+        if ('image' === $field['type']) {
+            $wp_customize->add_control(
+                new WP_Customize_Media_Control(
+                    $wp_customize,
+                    $setting_id,
+                    array(
+                        'label'     => $field['label'],
+                        'section'   => $section_id,
+                        'settings'  => $setting_id,
+                        'mime_type' => 'image',
+                    )
+                )
+            );
+        } else {
+            $wp_customize->add_control($setting_id, array(
+                'label'   => $field['label'],
+                'section' => $section_id,
+                'type'    => $field['type'],
+            ));
+        }
+    }
+}
+add_action('customize_register', 'mentari_bintaro_customizer');
+
+function mentari_bintaro_content($field)
+{
+    $fields = mentari_bintaro_sections();
+
+    if (!isset($fields[$field])) {
+        return '';
+    }
+
+    $setting_id = 'mentari_bintaro_' . $field;
+
+    if ('image' === $fields[$field]['type']) {
+        $image_id = get_theme_mod($setting_id, 0);
+        $image_url = $image_id ? wp_get_attachment_url($image_id) : false;
+
+        return $image_url ? $image_url : $fields[$field]['default'];
+    }
+
+    $value = get_theme_mod($setting_id, $fields[$field]['default']);
+
+    if (!is_string($value) || '' === trim($value)) {
+        return $fields[$field]['default'];
+    }
+
+    return $value;
+}
+
+/**
+ * Register MIS Jakarta Customizer
+ */
+function mentari_jakarta_customizer($wp_customize)
+{
+    $wp_customize->add_section('mentari_jakarta_section', array(
+        'title'       => 'MIS Jakarta Campus',
+        'priority'    => 35,
+        'description' => 'Edit content halaman MIS Jakarta Campus.',
+    ));
+
+    $fields = mentari_jakarta_sections();
+
+    foreach ($fields as $key => $field) {
+
+        $setting_id = 'mentari_jakarta_' . $key;
+
+        $wp_customize->add_setting($setting_id, array(
+            'default'           => 'image' === $field['type'] ? 0 : $field['default'],
+            'sanitize_callback' => (
+                $field['type'] === 'url'
+                ? 'esc_url_raw'
+                : ($field['type'] === 'image'
+                    ? 'absint'
+                    : ($field['type'] === 'textarea'
+                        ? 'sanitize_textarea_field'
+                        : 'sanitize_text_field'))
+            ),
+            'transport' => 'refresh',
+        ));
+
+        if ($field['type'] === 'image') {
+
+            $wp_customize->add_control(
+                new WP_Customize_Media_Control(
+                    $wp_customize,
+                    $setting_id,
+                    array(
+                        'label'     => $field['label'],
+                        'section'   => 'mentari_jakarta_section',
+                        'settings'  => $setting_id,
+                        'mime_type' => 'image',
+                    )
+                )
+            );
+
+        } else {
+            $wp_customize->add_control($setting_id, array(
+                'label'   => $field['label'],
+                'section' => 'mentari_jakarta_section',
+                'type'    => $field['type'],
+            ));
+        }
+    }
+}
+add_action('customize_register', 'mentari_jakarta_customizer');
+
+
+/**
+ * Ambil konten MIS Jakarta
+ */
+function mentari_jakarta_content($field)
+{
+    $fields = mentari_jakarta_sections();
+
+    if (!isset($fields[$field])) {
+        return '';
+    }
+
+    $setting_id = 'mentari_jakarta_' . $field;
+    if ($fields[$field]['type'] === 'image') {
+        $image_id = get_theme_mod($setting_id, 0);
+        $image_url = $image_id ? wp_get_attachment_url($image_id) : false;
+
+        return $image_url ? $image_url : $fields[$field]['default'];
+    }
+
+    return get_theme_mod(
+        $setting_id,
+        $fields[$field]['default']
+    );
+}
+
+/*** Mentari School - Mentari Preschool Page Customizer ***/
+
+function mentari_preschool_sections()
+{
+    $img = 'https://images.squarespace-cdn.com/content/v1/60c9a5215a821d628e0e1c65/';
+
+    return array(
+        'hero' => array(
+            'title' => 'Hero',
+            'fields' => array(
+                'hero_label' => array('text', 'Label kecil', 'Early Childhood'),
+                'hero_title' => array('text', 'Judul', 'Mentari Preschool Jakarta'),
+                'hero_desc' => array('textarea', 'Deskripsi', 'Bright, creative, and comforting environment for early childhood learners.'),
+                'hero_badge' => array('text', 'Teks badge', 'Est. 1994'),
+            ),
+        ),
+        'content' => array(
+            'title' => 'Program Overview',
+            'fields' => array(
+                'content_title' => array('text', 'Judul', 'A Legacy of Quality Early Education'),
+                'content_lead' => array('textarea', 'Paragraf utama', 'Since 1994, Mentari Preschool has been nurturing the love for discovery in little children through play, arts, and foundational literacy.'),
+                'content_text' => array('textarea', 'Paragraf kedua', 'Our caring, skillful teachers create an environment where each child feels seen, loved, and encouraged to explore their unique creativity.'),
+                'content_btn' => array('text', 'Teks tombol', 'Preschool Admission'),
+                'content_image' => array('image', 'Gambar', $img . 'c3d7a938-2ffe-460e-92a4-6a785a41fdb2/L1030398.jpg'),
+                'content_image_alt' => array('text', 'Alt teks gambar', 'Mentari Preschool'),
+                'cta_url' => array('url', 'URL tombol Preschool Admission', home_url('/admission/')),
+            ),
+        ),
+    );
+}
+
+/** Ambil nilai satu field Mentari Preschool (dari Customizer, atau default bila belum diubah). */
+function mentari_preschool($key)
+{
+    static $defaults = null;
+    if (null === $defaults) {
+        $defaults = array();
+        foreach (mentari_preschool_sections() as $section) {
+            foreach ($section['fields'] as $field_key => $field) {
+                $defaults[$field_key] = $field[2];
+            }
+        }
+    }
+    $default = isset($defaults[$key]) ? $defaults[$key] : '';
+    return get_theme_mod('mentari_preschool_' . $key, $default);
+}
+
+function mentari_preschool_customize_register($wp_customize)
+{
+    $wp_customize->add_panel('mentari_preschool_panel', array(
+        'title' => __('Mentari Preschool Page', 'mentari-school'),
+        'priority' => 103,
+    ));
+
+    $sanitizers = array(
+        'text' => 'sanitize_text_field',
+        'textarea' => 'sanitize_textarea_field',
+        'image' => 'esc_url_raw',
+        'url' => 'esc_url_raw',
+    );
+
+    foreach (mentari_preschool_sections() as $section_id => $section) {
+        $wp_customize->add_section('mentari_preschool_' . $section_id, array(
+            'title' => $section['title'],
+            'panel' => 'mentari_preschool_panel',
+        ));
+
+        foreach ($section['fields'] as $key => $field) {
+            list($type, $label, $default) = $field;
+            $setting_id = 'mentari_preschool_' . $key;
+
+            $wp_customize->add_setting($setting_id, array(
+                'default' => $default,
+                'sanitize_callback' => $sanitizers[$type],
+                'transport' => 'refresh',
+            ));
+
+            if ('image' === $type) {
+                $wp_customize->add_control(new WP_Customize_Image_Control($wp_customize, $setting_id, array(
+                    'label' => $label,
+                    'section' => 'mentari_preschool_' . $section_id,
+                )));
+            } else {
+                $wp_customize->add_control($setting_id, array(
+                    'label' => $label,
+                    'section' => 'mentari_preschool_' . $section_id,
+                    'type' => $type,
+                ));
+            }
+        }
+    }
+}
+add_action('customize_register', 'mentari_preschool_customize_register');
+
+
+/*** Mentari School - MIS Grand Surya Page Customizer ***/
+
+function mentari_grand_surya_sections()
+{
+    $img = 'https://images.squarespace-cdn.com/content/v1/60c9a5215a821d628e0e1c65/';
+
+    return array(
+        'hero' => array(
+            'title' => 'Hero',
+            'fields' => array(
+                'hero_label' => array('text', 'Label kecil', 'Campus Location'),
+                'hero_title' => array('text', 'Judul', 'MIS Grand Surya'),
+                'hero_desc' => array('textarea', 'Deskripsi', 'Perumahan Grand Surya, Pegadungan, Kalideres, Jakarta Barat'),
+                'hero_badge' => array('text', 'Teks badge', 'West Jakarta Campus'),
+            ),
+        ),
+        'about' => array(
+            'title' => 'Campus Overview',
+            'fields' => array(
+                'about_title' => array('text', 'Judul', 'Holistic Formation at Grand Surya'),
+                'about_lead' => array('textarea', 'Paragraf utama', 'Purpose-built modern campus providing exceptional international curriculum and holistic development programs in West Jakarta.'),
+                'about_text' => array('textarea', 'Paragraf kedua', 'Featuring smart classrooms, expansive outdoor sports facilities, creative arts and performance spaces, and dedicated STEM laboratories.'),
+                'about_btn' => array('text', 'Teks tombol', 'Contact Grand Surya'),
+                'about_url' => array('url', 'URL tombol Contact Grand Surya', home_url('/contact/')),
+                'about_image' => array('image', 'Gambar', $img . 'b9584050-a372-4b9f-95e7-2e57688e2f7f/DJI_0266.jpg'),
+                'about_image_alt' => array('text', 'Alt teks gambar', 'MIS Grand Surya Campus'),
+            ),
+        ),
+    );
+}
+
+/** Ambil nilai satu field MIS Grand Surya (dari Customizer, atau default bila belum diubah). */
+function mentari_grand_surya($key)
+{
+    static $defaults = null;
+    if (null === $defaults) {
+        $defaults = array();
+        foreach (mentari_grand_surya_sections() as $section) {
+            foreach ($section['fields'] as $field_key => $field) {
+                $defaults[$field_key] = $field[2];
+            }
+        }
+    }
+    $default = isset($defaults[$key]) ? $defaults[$key] : '';
+    return get_theme_mod('mentari_grand_surya_' . $key, $default);
+}
+
+function mentari_grand_surya_customize_register($wp_customize)
+{
+    $wp_customize->add_panel('mentari_grand_surya_panel', array(
+        'title' => __('MIS Grand Surya Page', 'mentari-school'),
+        'priority' => 104,
+    ));
+
+    $sanitizers = array(
+        'text' => 'sanitize_text_field',
+        'textarea' => 'sanitize_textarea_field',
+        'image' => 'esc_url_raw',
+        'url' => 'esc_url_raw',
+    );
+
+    foreach (mentari_grand_surya_sections() as $section_id => $section) {
+        $wp_customize->add_section('mentari_grand_surya_' . $section_id, array(
+            'title' => $section['title'],
+            'panel' => 'mentari_grand_surya_panel',
+        ));
+
+        foreach ($section['fields'] as $key => $field) {
+            list($type, $label, $default) = $field;
+            $setting_id = 'mentari_grand_surya_' . $key;
+
+            $wp_customize->add_setting($setting_id, array(
+                'default' => $default,
+                'sanitize_callback' => $sanitizers[$type],
+                'transport' => 'refresh',
+            ));
+
+            if ('image' === $type) {
+                $wp_customize->add_control(new WP_Customize_Image_Control($wp_customize, $setting_id, array(
+                    'label' => $label,
+                    'section' => 'mentari_grand_surya_' . $section_id,
+                )));
+            } else {
+                $wp_customize->add_control($setting_id, array(
+                    'label' => $label,
+                    'section' => 'mentari_grand_surya_' . $section_id,
+                    'type' => $type,
+                ));
+            }
+        }
+    }
+}
+add_action('customize_register', 'mentari_grand_surya_customize_register');
+
+/*** Mentari School - Sunflower Preschool Page Customizer ***/
+
+function mentari_sunflower_sections()
+{
+    $img = 'https://images.squarespace-cdn.com/content/v1/60c9a5215a821d628e0e1c65/';
+
+    return array(
+        'hero' => array(
+            'title' => 'Hero',
+            'fields' => array(
+                'hero_label' => array('text', 'Label kecil', 'Early Childhood'),
+                'hero_title' => array('text', 'Judul', 'Sunflower Preschool'),
+                'hero_desc' => array('textarea', 'Deskripsi', 'A nurturing and joyful environment designed to spark curiosity, creativity, and foundational learning for young children.'),
+                'hero_badge' => array('text', 'Teks badge', 'Early Years Program'),
+            ),
+        ),
+        'content' => array(
+            'title' => 'Program Overview',
+            'fields' => array(
+                'content_title' => array('text', 'Judul', 'Joyful Discovery Every Day'),
+                'content_lead' => array('textarea', 'Paragraf utama', 'Sunflower Preschool provides a warm, stimulating, and family-like atmosphere where children thrive through sensory play and collaborative activities.'),
+                'content_text' => array('textarea', 'Paragraf kedua', 'Focusing on bilingual development, social skills, and creative exploration to build confident, joyful learners ready for elementary school.'),
+                'content_btn' => array('text', 'Teks tombol', 'Join Sunflower Family'),
+                'content_url' => array('url', 'URL tombol Join Sunflower Family', home_url('/admission/')),
+                'content_image' => array('image', 'Gambar', $img . '7bae7578-f323-4c61-952f-dc78f4ec141f/DSC01916-2.jpg'),
+                'content_image_alt' => array('text', 'Alt teks gambar', 'Sunflower Preschool'),
+            ),
+        ),
+    );
+}
+
+/** Ambil nilai satu field Sunflower Preschool (dari Customizer, atau default bila belum diubah). */
+function mentari_sunflower($key)
+{
+    static $defaults = null;
+    if (null === $defaults) {
+        $defaults = array();
+        foreach (mentari_sunflower_sections() as $section) {
+            foreach ($section['fields'] as $field_key => $field) {
+                $defaults[$field_key] = $field[2];
+            }
+        }
+    }
+    $default = isset($defaults[$key]) ? $defaults[$key] : '';
+    return get_theme_mod('mentari_sunflower_' . $key, $default);
+}
+
+function mentari_sunflower_customize_register($wp_customize)
+{
+    $wp_customize->add_panel('mentari_sunflower_panel', array(
+        'title' => __('Sunflower Preschool Page', 'mentari-school'),
+        'priority' => 105,
+    ));
+
+    $sanitizers = array(
+        'text' => 'sanitize_text_field',
+        'textarea' => 'sanitize_textarea_field',
+        'image' => 'esc_url_raw',
+        'url' => 'esc_url_raw',
+    );
+
+    foreach (mentari_sunflower_sections() as $section_id => $section) {
+        $wp_customize->add_section('mentari_sunflower_' . $section_id, array(
+            'title' => $section['title'],
+            'panel' => 'mentari_sunflower_panel',
+        ));
+
+        foreach ($section['fields'] as $key => $field) {
+            list($type, $label, $default) = $field;
+            $setting_id = 'mentari_sunflower_' . $key;
+
+            $wp_customize->add_setting($setting_id, array(
+                'default' => $default,
+                'sanitize_callback' => $sanitizers[$type],
+                'transport' => 'refresh',
+            ));
+
+            if ('image' === $type) {
+                $wp_customize->add_control(new WP_Customize_Image_Control($wp_customize, $setting_id, array(
+                    'label' => $label,
+                    'section' => 'mentari_sunflower_' . $section_id,
+                )));
+            } else {
+                $wp_customize->add_control($setting_id, array(
+                    'label' => $label,
+                    'section' => 'mentari_sunflower_' . $section_id,
+                    'type' => $type,
+                ));
+            }
+        }
+    }
+}
+add_action('customize_register', 'mentari_sunflower_customize_register');
+>>>>>>> beac6b8b8f93cbd0ad8cb9c3d03d52ea349d94f5
