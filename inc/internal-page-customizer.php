@@ -161,6 +161,14 @@ add_action('customize_register', 'mentari_register_internal_pages_customizer', 2
 
 function mentari_page_content($slug, $field_id)
 {
+    if ('mis-jakarta' === $slug) {
+        return mentari_jakarta_content($field_id);
+    }
+
+    if ('mis-bintaro' === $slug) {
+        return mentari_bintaro_content($field_id);
+    }
+
     $pages = mentari_internal_pages_config();
 
     if (!isset($pages[$slug]['fields'][$field_id])) {
@@ -682,3 +690,314 @@ function mentari_uc_customize_register($wp_customize)
     }
 }
 add_action('customize_register', 'mentari_uc_customize_register');
+
+/**
+ * MIS Jakarta Campus Customizer
+ */
+
+/**
+ * Konfigurasi field MIS Jakarta
+ */
+function mentari_jakarta_sections()
+{
+    return array(
+
+        // HERO SECTION
+        'hero_label' => array(
+            'label'   => 'Hero Label',
+            'default' => 'MENTARI INTERCULTURAL SCHOOL',
+            'type'    => 'text',
+        ),
+
+        'hero_title' => array(
+            'label'   => 'Hero Title',
+            'default' => 'Mentari Intercultural School Jakarta',
+            'type'    => 'text',
+        ),
+
+        'hero_description' => array(
+            'label'   => 'Hero Description',
+            'default' => 'Discover a learning environment that inspires students to grow, explore, and achieve their best.',
+            'type'    => 'textarea',
+        ),
+
+        'hero_badge' => array(
+            'label'   => 'Hero Badge',
+            'default' => 'Jakarta Campus',
+            'type'    => 'text',
+        ),
+
+        // CAMPUS SECTION
+        'campus_title' => array(
+            'label'   => 'Campus Title',
+            'default' => 'Welcome to Mentari Intercultural School Jakarta',
+            'type'    => 'text',
+        ),
+
+        'campus_paragraph_1' => array(
+            'label'   => 'Campus Paragraph 1',
+            'default' => 'Mentari Intercultural School Jakarta provides an inspiring educational environment that supports students in developing their academic abilities and personal potential.',
+            'type'    => 'textarea',
+        ),
+
+        'campus_paragraph_2' => array(
+            'label'   => 'Campus Paragraph 2',
+            'default' => 'With dedicated teachers and a supportive learning community, students are encouraged to become confident, creative, and responsible global citizens.',
+            'type'    => 'textarea',
+        ),
+
+        // CAMPUS IMAGE
+        'campus_image' => array(
+            'label'   => 'Campus Image',
+            'default' => 'https://images.squarespace-cdn.com/content/v1/60c9a5215a821d628e0e1c65/1c0f3d35-d3ae-4cc5-9adc-18948a8b41a5/DSC08102.jpg',
+            'type'    => 'image',
+        ),
+
+        'campus_image_alt' => array(
+            'label'   => 'Campus Image Alt',
+            'default' => 'Mentari Intercultural School Jakarta Campus',
+            'type'    => 'text',
+        ),
+
+        // BUTTON
+        'cta_text' => array(
+            'label'   => 'Button Text',
+            'default' => 'Explore Our Campus',
+            'type'    => 'text',
+        ),
+
+        'cta_url' => array(
+            'label'   => 'Button URL',
+            'default' => '#',
+            'type'    => 'url',
+        ),
+
+    );
+}
+
+
+
+
+/**
+ * MIS Bintaro Campus Customizer
+ */
+function mentari_bintaro_sections()
+{
+    return array(
+        'hero_label' => array(
+            'label'   => 'Hero Label',
+            'default' => 'MENTARI INTERCULTURAL SCHOOL',
+            'type'    => 'text',
+        ),
+        'hero_title' => array(
+            'label'   => 'Hero Title',
+            'default' => 'Mentari Intercultural School Bintaro',
+            'type'    => 'text',
+        ),
+        'hero_description' => array(
+            'label'   => 'Hero Description',
+            'default' => 'Discover a learning environment that inspires students to grow, explore, and achieve their best.',
+            'type'    => 'textarea',
+        ),
+        'hero_badge' => array(
+            'label'   => 'Hero Badge',
+            'default' => 'Bintaro Campus',
+            'type'    => 'text',
+        ),
+        'campus_title' => array(
+            'label'   => 'Campus Title',
+            'default' => 'Welcome to Mentari Intercultural School Bintaro',
+            'type'    => 'text',
+        ),
+        'campus_paragraph_1' => array(
+            'label'   => 'Campus Paragraph 1',
+            'default' => 'Mentari Intercultural School Bintaro provides an inspiring educational environment that supports students in developing their academic abilities and personal potential.',
+            'type'    => 'textarea',
+        ),
+        'campus_paragraph_2' => array(
+            'label'   => 'Campus Paragraph 2',
+            'default' => 'With dedicated teachers and a supportive learning community, students are encouraged to become confident, creative, and responsible global citizens.',
+            'type'    => 'textarea',
+        ),
+        'campus_image' => array(
+            'label'   => 'Campus Image',
+            'default' => 'https://images.squarespace-cdn.com/content/v1/60c9a5215a821d628e0e1c65/1c0f3d35-d3ae-4cc5-9adc-18948a8b41a5/DSC08102.jpg',
+            'type'    => 'image',
+        ),
+        'campus_image_alt' => array(
+            'label'   => 'Campus Image Alt',
+            'default' => 'Mentari Intercultural School Bintaro Campus',
+            'type'    => 'text',
+        ),
+        'cta_text' => array(
+            'label'   => 'Button Text',
+            'default' => 'Explore Our Campus',
+            'type'    => 'text',
+        ),
+        'cta_url' => array(
+            'label'   => 'Button URL',
+            'default' => '#',
+            'type'    => 'url',
+        ),
+    );
+}
+
+function mentari_bintaro_customizer($wp_customize)
+{
+    $section_id = 'mentari_bintaro_section';
+
+    $wp_customize->add_section($section_id, array(
+        'title'       => 'MIS Bintaro Campus',
+        'priority'    => 36,
+        'description' => 'Edit content halaman MIS Bintaro Campus.',
+    ));
+
+    foreach (mentari_bintaro_sections() as $key => $field) {
+        $setting_id = 'mentari_bintaro_' . $key;
+
+        $wp_customize->add_setting($setting_id, array(
+            'default'           => 'image' === $field['type'] ? 0 : $field['default'],
+            'sanitize_callback' => (
+                'url' === $field['type']
+                    ? 'esc_url_raw'
+                    : ('image' === $field['type']
+                        ? 'absint'
+                        : ('textarea' === $field['type']
+                            ? 'sanitize_textarea_field'
+                            : 'sanitize_text_field'))
+            ),
+            'transport' => 'refresh',
+        ));
+
+        if ('image' === $field['type']) {
+            $wp_customize->add_control(
+                new WP_Customize_Media_Control(
+                    $wp_customize,
+                    $setting_id,
+                    array(
+                        'label'     => $field['label'],
+                        'section'   => $section_id,
+                        'settings'  => $setting_id,
+                        'mime_type' => 'image',
+                    )
+                )
+            );
+        } else {
+            $wp_customize->add_control($setting_id, array(
+                'label'   => $field['label'],
+                'section' => $section_id,
+                'type'    => $field['type'],
+            ));
+        }
+    }
+}
+add_action('customize_register', 'mentari_bintaro_customizer');
+
+function mentari_bintaro_content($field)
+{
+    $fields = mentari_bintaro_sections();
+
+    if (!isset($fields[$field])) {
+        return '';
+    }
+
+    $setting_id = 'mentari_bintaro_' . $field;
+
+    if ('image' === $fields[$field]['type']) {
+        $image_id = get_theme_mod($setting_id, 0);
+        $image_url = $image_id ? wp_get_attachment_url($image_id) : false;
+
+        return $image_url ? $image_url : $fields[$field]['default'];
+    }
+
+    $value = get_theme_mod($setting_id, $fields[$field]['default']);
+
+    if (!is_string($value) || '' === trim($value)) {
+        return $fields[$field]['default'];
+    }
+
+    return $value;
+}
+
+/**
+ * Register MIS Jakarta Customizer
+ */
+function mentari_jakarta_customizer($wp_customize)
+{
+    $wp_customize->add_section('mentari_jakarta_section', array(
+        'title'       => 'MIS Jakarta Campus',
+        'priority'    => 35,
+        'description' => 'Edit content halaman MIS Jakarta Campus.',
+    ));
+
+    $fields = mentari_jakarta_sections();
+
+    foreach ($fields as $key => $field) {
+
+        $setting_id = 'mentari_jakarta_' . $key;
+
+        $wp_customize->add_setting($setting_id, array(
+            'default'           => 'image' === $field['type'] ? 0 : $field['default'],
+            'sanitize_callback' => (
+                $field['type'] === 'url'
+                ? 'esc_url_raw'
+                : ($field['type'] === 'image'
+                    ? 'absint'
+                    : ($field['type'] === 'textarea'
+                        ? 'sanitize_textarea_field'
+                        : 'sanitize_text_field'))
+            ),
+            'transport' => 'refresh',
+        ));
+
+        if ($field['type'] === 'image') {
+
+            $wp_customize->add_control(
+                new WP_Customize_Media_Control(
+                    $wp_customize,
+                    $setting_id,
+                    array(
+                        'label'     => $field['label'],
+                        'section'   => 'mentari_jakarta_section',
+                        'settings'  => $setting_id,
+                        'mime_type' => 'image',
+                    )
+                )
+            );
+
+        } else {
+            $wp_customize->add_control($setting_id, array(
+                'label'   => $field['label'],
+                'section' => 'mentari_jakarta_section',
+                'type'    => $field['type'],
+            ));
+        }
+    }
+}
+add_action('customize_register', 'mentari_jakarta_customizer');
+
+
+/**
+ * Ambil konten MIS Jakarta
+ */
+function mentari_jakarta_content($field)
+{
+    $fields = mentari_jakarta_sections();
+
+    if (!isset($fields[$field])) {
+        return '';
+    }
+
+    $setting_id = 'mentari_jakarta_' . $field;
+    if ($fields[$field]['type'] === 'image') {
+        $image_id = get_theme_mod($setting_id, 0);
+        $image_url = $image_id ? wp_get_attachment_url($image_id) : false;
+
+        return $image_url ? $image_url : $fields[$field]['default'];
+    }
+
+    return get_theme_mod(
+        $setting_id,
+        $fields[$field]['default']
+    );
+}
