@@ -561,30 +561,6 @@ function mentari_pe_customize_register($wp_customize)
 }
 add_action('customize_register', 'mentari_pe_customize_register');
 
-<<<<<<< HEAD
-
-function mentari_elementary_sections()
-{
-    return array(
-        'hero' => array(
-            'title' => __('Hero Banner', 'mentari-school'),
-            'fields' => array(
-                'hero_label' => array('text', 'Label kecil', 'Primary Years'),
-                'hero_title' => array('text', 'Judul', 'Elementary School (IB PYP)'),
-                'hero_desc' => array('textarea', 'Deskripsi', 'Igniting young minds through transdisciplinary inquiry, conceptual understanding, and global awareness.'),
-                'hero_badge' => array('text', 'Badge kelas', 'Grades 1 - 5'),
-            ),
-        ),
-        'content' => array(
-            'title' => __('Konten Utama', 'mentari-school'),
-            'fields' => array(
-                'content_title' => array('text', 'Judul', 'IB Primary Years Programme'),
-                'content_lead' => array('textarea', 'Paragraf utama', 'In Elementary School, students develop knowledge, conceptual understanding, and agency across 6 transdisciplinary themes.'),
-                'content_text' => array('textarea', 'Paragraf kedua', 'Subjects include Mathematics, Science & Inquiry, English Language Arts, Bahasa Indonesia, Mandarin, Visual Arts, Music, Physical & Health Education, and Digital Literacy.'),
-                'content_btn' => array('text', 'Teks tombol', 'Elementary Admission'),
-                'content_image' => array('image', 'Gambar', 'https://images.squarespace-cdn.com/content/v1/60c9a5215a821d628e0e1c65/5837a716-b51d-4b88-966d-863b64140333/Elementary+7.png'),
-                'content_image_alt' => array('text', 'Alt teks gambar', 'Elementary School'),
-=======
 /*** Mentari School - High School Page Customizer ***/
 
 /**
@@ -612,32 +588,11 @@ function mentari_hs_sections()
                 'main_text' => array('textarea', 'Paragraf kedua', 'Our curriculum emphasizes rigorous academics, Creativity, Activity, Service (CAS), Theory of Knowledge (TOK), and a 4,000-word Extended Essay that thoroughly prepares students for university-level research.'),
                 'main_button' => array('text', 'Teks tombol (ke Admission)', 'Apply for High School'),
                 'main_image' => array('image', 'Gambar', 'https://images.squarespace-cdn.com/content/v1/60c9a5215a821d628e0e1c65/1576ef94-cf1a-4ef4-86e4-2411b5967bb8/High+School+2.jpg'),
->>>>>>> beac6b8b8f93cbd0ad8cb9c3d03d52ea349d94f5
             ),
         ),
     );
 }
 
-<<<<<<< HEAD
-/**
- * Ambil nilai satu field. Dipakai di template:
- * echo esc_html(mentari_elementary('hero_title'));
- */
-function mentari_elementary($key)
-{
-    foreach (mentari_elementary_sections() as $section) {
-        if (isset($section['fields'][$key])) {
-            return get_theme_mod('mentari_elementary_' . $key, $section['fields'][$key][2]);
-        }
-    }
-    return '';
-}
-
-function mentari_elementary_customize_register($wp_customize)
-{
-    $wp_customize->add_panel('mentari_elementary_panel', array(
-        'title' => __('Elementary Page', 'mentari-school'),
-=======
 /** Ambil nilai satu field High School (dari Customizer, atau default bila belum diubah). */
 function mentari_hs($key)
 {
@@ -658,7 +613,6 @@ function mentari_hs_customize_register($wp_customize)
 {
     $wp_customize->add_panel('mentari_hs_panel', array(
         'title' => __('High School Page', 'mentari-school'),
->>>>>>> beac6b8b8f93cbd0ad8cb9c3d03d52ea349d94f5
         'priority' => 103,
     ));
 
@@ -668,26 +622,15 @@ function mentari_hs_customize_register($wp_customize)
         'image' => 'esc_url_raw',
     );
 
-<<<<<<< HEAD
-    foreach (mentari_elementary_sections() as $section_id => $section) {
-        $wp_customize->add_section('mentari_elementary_' . $section_id, array(
-            'title' => $section['title'],
-            'panel' => 'mentari_elementary_panel',
-=======
     foreach (mentari_hs_sections() as $section_id => $section) {
         $wp_customize->add_section('mentari_hs_' . $section_id, array(
             'title' => $section['title'],
             'panel' => 'mentari_hs_panel',
->>>>>>> beac6b8b8f93cbd0ad8cb9c3d03d52ea349d94f5
         ));
 
         foreach ($section['fields'] as $key => $field) {
             list($type, $label, $default) = $field;
-<<<<<<< HEAD
-            $setting_id = 'mentari_elementary_' . $key;
-=======
             $setting_id = 'mentari_hs_' . $key;
->>>>>>> beac6b8b8f93cbd0ad8cb9c3d03d52ea349d94f5
 
             $wp_customize->add_setting($setting_id, array(
                 'default' => $default,
@@ -698,52 +641,18 @@ function mentari_hs_customize_register($wp_customize)
             if ('image' === $type) {
                 $wp_customize->add_control(new WP_Customize_Image_Control($wp_customize, $setting_id, array(
                     'label' => $label,
-<<<<<<< HEAD
-                    'section' => 'mentari_elementary_' . $section_id,
-=======
                     'section' => 'mentari_hs_' . $section_id,
->>>>>>> beac6b8b8f93cbd0ad8cb9c3d03d52ea349d94f5
                 )));
             } else {
                 $wp_customize->add_control($setting_id, array(
                     'label' => $label,
-<<<<<<< HEAD
-                    'section' => 'mentari_elementary_' . $section_id,
-=======
                     'section' => 'mentari_hs_' . $section_id,
->>>>>>> beac6b8b8f93cbd0ad8cb9c3d03d52ea349d94f5
                     'type' => $type,
                 ));
             }
         }
     }
 }
-<<<<<<< HEAD
-add_action('customize_register', 'mentari_elementary_customize_register');
-
-
-function mentari_middle_school_sections()
-{
-    return array(
-        'hero' => array(
-            'title' => __('Hero Banner', 'mentari-school'),
-            'fields' => array(
-                'hero_label' => array('text', 'Label kecil', 'Middle Years'),
-                'hero_title' => array('text', 'Judul', 'Middle School (IB MYP)'),
-                'hero_desc' => array('textarea', 'Deskripsi', 'Developing critical thinkers, courageous innovators, and empathetic global communicators.'),
-                'hero_badge' => array('text', 'Badge kelas', 'Grades 6 - 8'),
-            ),
-        ),
-        'content' => array(
-            'title' => __('Konten Utama', 'mentari-school'),
-            'fields' => array(
-                'content_title' => array('text', 'Judul', 'IB Middle Years Programme'),
-                'content_lead' => array('textarea', 'Paragraf utama', 'Middle School provides an intellectual framework that encourages students to embrace and understand the connections between traditional subjects and the real world.'),
-                'content_text' => array('textarea', 'Paragraf kedua', 'Students participate in community projects, scientific investigations, model united nations, and competitive athletics that nurture resilience and leadership.'),
-                'content_btn' => array('text', 'Teks tombol', 'Middle School Admission'),
-                'content_image' => array('image', 'Gambar', 'https://images.squarespace-cdn.com/content/v1/60c9a5215a821d628e0e1c65/7530af28-f093-4e25-8353-e17589919861/School+Curricula+-+JHS+45_2.jpg'),
-                'content_image_alt' => array('text', 'Alt teks gambar', 'Middle School'),
-=======
 add_action('customize_register', 'mentari_hs_customize_register');
 
 /*** Mentari School - University Counseling Page Customizer ***/
@@ -775,32 +684,11 @@ function mentari_uc_sections()
                 'item3' => array('text', 'Poin 3 (kosongkan untuk menyembunyikan)', 'Annual MIS International University Fairs with 70+ global universities'),
                 'main_button' => array('text', 'Teks tombol (ke Contact)', 'Book a Counseling Session'),
                 'main_image' => array('image', 'Gambar', 'https://images.squarespace-cdn.com/content/v1/60c9a5215a821d628e0e1c65/8f65bfce-676a-43d1-a0f6-17db6974c471/Screenshot+2025-07-30+at+10.25.50.png'),
->>>>>>> beac6b8b8f93cbd0ad8cb9c3d03d52ea349d94f5
             ),
         ),
     );
 }
 
-<<<<<<< HEAD
-/**
- * Ambil nilai satu field. Dipakai di template:
- * echo esc_html(mentari_middle_school('hero_title'));
- */
-function mentari_middle_school($key)
-{
-    foreach (mentari_middle_school_sections() as $section) {
-        if (isset($section['fields'][$key])) {
-            return get_theme_mod('mentari_middle_school_' . $key, $section['fields'][$key][2]);
-        }
-    }
-    return '';
-}
-
-function mentari_middle_school_customize_register($wp_customize)
-{
-    $wp_customize->add_panel('mentari_middle_school_panel', array(
-        'title' => __('Middle School Page', 'mentari-school'),
-=======
 /** Ambil nilai satu field University Counseling (dari Customizer, atau default bila belum diubah). */
 function mentari_uc($key)
 {
@@ -821,7 +709,6 @@ function mentari_uc_customize_register($wp_customize)
 {
     $wp_customize->add_panel('mentari_uc_panel', array(
         'title' => __('University Counseling Page', 'mentari-school'),
->>>>>>> beac6b8b8f93cbd0ad8cb9c3d03d52ea349d94f5
         'priority' => 104,
     ));
 
@@ -831,26 +718,15 @@ function mentari_uc_customize_register($wp_customize)
         'image' => 'esc_url_raw',
     );
 
-<<<<<<< HEAD
-    foreach (mentari_middle_school_sections() as $section_id => $section) {
-        $wp_customize->add_section('mentari_middle_school_' . $section_id, array(
-            'title' => $section['title'],
-            'panel' => 'mentari_middle_school_panel',
-=======
     foreach (mentari_uc_sections() as $section_id => $section) {
         $wp_customize->add_section('mentari_uc_' . $section_id, array(
             'title' => $section['title'],
             'panel' => 'mentari_uc_panel',
->>>>>>> beac6b8b8f93cbd0ad8cb9c3d03d52ea349d94f5
         ));
 
         foreach ($section['fields'] as $key => $field) {
             list($type, $label, $default) = $field;
-<<<<<<< HEAD
-            $setting_id = 'mentari_middle_school_' . $key;
-=======
             $setting_id = 'mentari_uc_' . $key;
->>>>>>> beac6b8b8f93cbd0ad8cb9c3d03d52ea349d94f5
 
             $wp_customize->add_setting($setting_id, array(
                 'default' => $default,
@@ -861,29 +737,18 @@ function mentari_uc_customize_register($wp_customize)
             if ('image' === $type) {
                 $wp_customize->add_control(new WP_Customize_Image_Control($wp_customize, $setting_id, array(
                     'label' => $label,
-<<<<<<< HEAD
-                    'section' => 'mentari_middle_school_' . $section_id,
-=======
                     'section' => 'mentari_uc_' . $section_id,
->>>>>>> beac6b8b8f93cbd0ad8cb9c3d03d52ea349d94f5
                 )));
             } else {
                 $wp_customize->add_control($setting_id, array(
                     'label' => $label,
-<<<<<<< HEAD
-                    'section' => 'mentari_middle_school_' . $section_id,
-=======
                     'section' => 'mentari_uc_' . $section_id,
->>>>>>> beac6b8b8f93cbd0ad8cb9c3d03d52ea349d94f5
                     'type' => $type,
                 ));
             }
         }
     }
 }
-<<<<<<< HEAD
-add_action('customize_register', 'mentari_middle_school_customize_register');
-=======
 add_action('customize_register', 'mentari_uc_customize_register');
 
 /**
@@ -1479,4 +1344,177 @@ function mentari_sunflower_customize_register($wp_customize)
     }
 }
 add_action('customize_register', 'mentari_sunflower_customize_register');
->>>>>>> beac6b8b8f93cbd0ad8cb9c3d03d52ea349d94f5
+
+
+function mentari_elementary_sections()
+{
+    return array(
+        'hero' => array(
+            'title' => __('Hero Banner', 'mentari-school'),
+            'fields' => array(
+                'hero_label' => array('text', 'Label kecil', 'Primary Years'),
+                'hero_title' => array('text', 'Judul', 'Elementary School (IB PYP)'),
+                'hero_desc' => array('textarea', 'Deskripsi', 'Igniting young minds through transdisciplinary inquiry, conceptual understanding, and global awareness.'),
+                'hero_badge' => array('text', 'Badge kelas', 'Grades 1 - 5'),
+            ),
+        ),
+        'content' => array(
+            'title' => __('Konten Utama', 'mentari-school'),
+            'fields' => array(
+                'content_title' => array('text', 'Judul', 'IB Primary Years Programme'),
+                'content_lead' => array('textarea', 'Paragraf utama', 'In Elementary School, students develop knowledge, conceptual understanding, and agency across 6 transdisciplinary themes.'),
+                'content_text' => array('textarea', 'Paragraf kedua', 'Subjects include Mathematics, Science & Inquiry, English Language Arts, Bahasa Indonesia, Mandarin, Visual Arts, Music, Physical & Health Education, and Digital Literacy.'),
+                'content_btn' => array('text', 'Teks tombol', 'Elementary Admission'),
+                'content_image' => array('image', 'Gambar', 'https://images.squarespace-cdn.com/content/v1/60c9a5215a821d628e0e1c65/5837a716-b51d-4b88-966d-863b64140333/Elementary+7.png'),
+                'content_image_alt' => array('text', 'Alt teks gambar', 'Elementary School'),
+            ),
+        ),
+    );
+}
+
+/**
+ * Ambil nilai satu field. Dipakai di template:
+ * echo esc_html(mentari_elementary('hero_title'));
+ */
+function mentari_elementary($key)
+{
+    foreach (mentari_elementary_sections() as $section) {
+        if (isset($section['fields'][$key])) {
+            return get_theme_mod('mentari_elementary_' . $key, $section['fields'][$key][2]);
+        }
+    }
+    return '';
+}
+
+function mentari_elementary_customize_register($wp_customize)
+{
+    $wp_customize->add_panel('mentari_elementary_panel', array(
+        'title' => __('Elementary Page', 'mentari-school'),
+        'priority' => 103,
+    ));
+
+    $sanitizers = array(
+        'text' => 'sanitize_text_field',
+        'textarea' => 'sanitize_textarea_field',
+        'image' => 'esc_url_raw',
+    );
+
+    foreach (mentari_elementary_sections() as $section_id => $section) {
+        $wp_customize->add_section('mentari_elementary_' . $section_id, array(
+            'title' => $section['title'],
+            'panel' => 'mentari_elementary_panel',
+        ));
+
+        foreach ($section['fields'] as $key => $field) {
+            list($type, $label, $default) = $field;
+            $setting_id = 'mentari_elementary_' . $key;
+
+            $wp_customize->add_setting($setting_id, array(
+                'default' => $default,
+                'sanitize_callback' => $sanitizers[$type],
+                'transport' => 'refresh',
+            ));
+
+            if ('image' === $type) {
+                $wp_customize->add_control(new WP_Customize_Image_Control($wp_customize, $setting_id, array(
+                    'label' => $label,
+                    'section' => 'mentari_elementary_' . $section_id,
+                )));
+            } else {
+                $wp_customize->add_control($setting_id, array(
+                    'label' => $label,
+                    'section' => 'mentari_elementary_' . $section_id,
+                    'type' => $type,
+                ));
+            }
+        }
+    }
+}
+add_action('customize_register', 'mentari_elementary_customize_register');
+
+
+function mentari_middle_school_sections()
+{
+    return array(
+        'hero' => array(
+            'title' => __('Hero Banner', 'mentari-school'),
+            'fields' => array(
+                'hero_label' => array('text', 'Label kecil', 'Middle Years'),
+                'hero_title' => array('text', 'Judul', 'Middle School (IB MYP)'),
+                'hero_desc' => array('textarea', 'Deskripsi', 'Developing critical thinkers, courageous innovators, and empathetic global communicators.'),
+                'hero_badge' => array('text', 'Badge kelas', 'Grades 6 - 8'),
+            ),
+        ),
+        'content' => array(
+            'title' => __('Konten Utama', 'mentari-school'),
+            'fields' => array(
+                'content_title' => array('text', 'Judul', 'IB Middle Years Programme'),
+                'content_lead' => array('textarea', 'Paragraf utama', 'Middle School provides an intellectual framework that encourages students to embrace and understand the connections between traditional subjects and the real world.'),
+                'content_text' => array('textarea', 'Paragraf kedua', 'Students participate in community projects, scientific investigations, model united nations, and competitive athletics that nurture resilience and leadership.'),
+                'content_btn' => array('text', 'Teks tombol', 'Middle School Admission'),
+                'content_image' => array('image', 'Gambar', 'https://images.squarespace-cdn.com/content/v1/60c9a5215a821d628e0e1c65/7530af28-f093-4e25-8353-e17589919861/School+Curricula+-+JHS+45_2.jpg'),
+                'content_image_alt' => array('text', 'Alt teks gambar', 'Middle School'),
+            ),
+        ),
+    );
+}
+
+/**
+ * Ambil nilai satu field. Dipakai di template:
+ * echo esc_html(mentari_middle_school('hero_title'));
+ */
+function mentari_middle_school($key)
+{
+    foreach (mentari_middle_school_sections() as $section) {
+        if (isset($section['fields'][$key])) {
+            return get_theme_mod('mentari_middle_school_' . $key, $section['fields'][$key][2]);
+        }
+    }
+    return '';
+}
+
+function mentari_middle_school_customize_register($wp_customize)
+{
+    $wp_customize->add_panel('mentari_middle_school_panel', array(
+        'title' => __('Middle School Page', 'mentari-school'),
+        'priority' => 104,
+    ));
+
+    $sanitizers = array(
+        'text' => 'sanitize_text_field',
+        'textarea' => 'sanitize_textarea_field',
+        'image' => 'esc_url_raw',
+    );
+
+    foreach (mentari_middle_school_sections() as $section_id => $section) {
+        $wp_customize->add_section('mentari_middle_school_' . $section_id, array(
+            'title' => $section['title'],
+            'panel' => 'mentari_middle_school_panel',
+        ));
+
+        foreach ($section['fields'] as $key => $field) {
+            list($type, $label, $default) = $field;
+            $setting_id = 'mentari_middle_school_' . $key;
+
+            $wp_customize->add_setting($setting_id, array(
+                'default' => $default,
+                'sanitize_callback' => $sanitizers[$type],
+                'transport' => 'refresh',
+            ));
+
+            if ('image' === $type) {
+                $wp_customize->add_control(new WP_Customize_Image_Control($wp_customize, $setting_id, array(
+                    'label' => $label,
+                    'section' => 'mentari_middle_school_' . $section_id,
+                )));
+            } else {
+                $wp_customize->add_control($setting_id, array(
+                    'label' => $label,
+                    'section' => 'mentari_middle_school_' . $section_id,
+                    'type' => $type,
+                ));
+            }
+        }
+    }
+}
+add_action('customize_register', 'mentari_middle_school_customize_register');
