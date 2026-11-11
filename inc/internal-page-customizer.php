@@ -765,70 +765,70 @@ function mentari_jakarta_sections()
         // HERO SECTION
         'hero_label' => array(
             'label'   => 'Hero Label',
-            'default' => 'MENTARI INTERCULTURAL SCHOOL',
+            'default' => 'Campus Location',
             'type'    => 'text',
         ),
 
         'hero_title' => array(
             'label'   => 'Hero Title',
-            'default' => 'Mentari Intercultural School Jakarta',
+            'default' => 'MIS Jakarta (Cipete)',
             'type'    => 'text',
         ),
 
         'hero_description' => array(
             'label'   => 'Hero Description',
-            'default' => 'Discover a learning environment that inspires students to grow, explore, and achieve their best.',
+            'default' => 'Jl. H. Jian No. 2, Cipete Utara, Kebayoran Baru, Jakarta Selatan 12150',
             'type'    => 'textarea',
         ),
 
         'hero_badge' => array(
             'label'   => 'Hero Badge',
-            'default' => 'Jakarta Campus',
+            'default' => 'Flagship Campus',
             'type'    => 'text',
         ),
 
         // CAMPUS SECTION
         'campus_title' => array(
             'label'   => 'Campus Title',
-            'default' => 'Welcome to Mentari Intercultural School Jakarta',
+            'default' => 'Welcome to MIS Jakarta',
             'type'    => 'text',
         ),
 
         'campus_paragraph_1' => array(
             'label'   => 'Campus Paragraph 1',
-            'default' => 'Mentari Intercultural School Jakarta provides an inspiring educational environment that supports students in developing their academic abilities and personal potential.',
+            'default' => 'Our founding international campus in Cipete offers complete educational levels from Elementary through Senior High School.',
             'type'    => 'textarea',
         ),
 
         'campus_paragraph_2' => array(
             'label'   => 'Campus Paragraph 2',
-            'default' => 'With dedicated teachers and a supportive learning community, students are encouraged to become confident, creative, and responsible global citizens.',
+            'default' => 'Equipped with science laboratories, design technology labs, indoor sports complex, Olympic swimming pool, performing arts auditorium, and rich library facilities.',
             'type'    => 'textarea',
         ),
 
         // CAMPUS IMAGE
         'campus_image' => array(
             'label'   => 'Campus Image',
-            'default' => 'https://images.squarespace-cdn.com/content/v1/60c9a5215a821d628e0e1c65/1c0f3d35-d3ae-4cc5-9adc-18948a8b41a5/DSC08102.jpg',
+            'default' => 'https://images.squarespace-cdn.com/content/v1/60c9a5215a821d628e0e1c65/55ef63c0-1f26-4ef8-aacc-43a4fe82b0c4/DJI_0855.JPG',
             'type'    => 'image',
         ),
 
         'campus_image_alt' => array(
             'label'   => 'Campus Image Alt',
-            'default' => 'Mentari Intercultural School Jakarta Campus',
+            'default' => 'MIS Jakarta Campus',
             'type'    => 'text',
         ),
 
         // BUTTON
         'cta_text' => array(
             'label'   => 'Button Text',
-            'default' => 'Explore Our Campus',
+            'default' => 'Schedule Campus Tour',
             'type'    => 'text',
         ),
 
         'cta_url' => array(
             'label'   => 'Button URL',
-            'default' => '#',
+            'default' => home_url('/contact/'),
             'type'    => 'url',
         ),
 
@@ -846,57 +846,57 @@ function mentari_bintaro_sections()
     return array(
         'hero_label' => array(
             'label'   => 'Hero Label',
-            'default' => 'MENTARI INTERCULTURAL SCHOOL',
+            'default' => 'Campus Location',
             'type'    => 'text',
         ),
         'hero_title' => array(
             'label'   => 'Hero Title',
-            'default' => 'Mentari Intercultural School Bintaro',
+            'default' => 'MIS Bintaro',
             'type'    => 'text',
         ),
         'hero_description' => array(
             'label'   => 'Hero Description',
-            'default' => 'Discover a learning environment that inspires students to grow, explore, and achieve their best.',
+            'default' => 'Jl. Bintaro Utama Sektor 9, Pondok Aren, Tangerang Selatan',
             'type'    => 'textarea',
         ),
         'hero_badge' => array(
             'label'   => 'Hero Badge',
-            'default' => 'Bintaro Campus',
+            'default' => 'Green Campus',
             'type'    => 'text',
         ),
         'campus_title' => array(
             'label'   => 'Campus Title',
-            'default' => 'Welcome to Mentari Intercultural School Bintaro',
+            'default' => 'Welcome to MIS Bintaro',
             'type'    => 'text',
         ),
         'campus_paragraph_1' => array(
             'label'   => 'Campus Paragraph 1',
-            'default' => 'Mentari Intercultural School Bintaro provides an inspiring educational environment that supports students in developing their academic abilities and personal potential.',
+            'default' => 'An expansive, green campus serving Early Childhood, Elementary, Middle School, and High School with cutting-edge academic and sports facilities.',
             'type'    => 'textarea',
         ),
         'campus_paragraph_2' => array(
             'label'   => 'Campus Paragraph 2',
-            'default' => 'With dedicated teachers and a supportive learning community, students are encouraged to become confident, creative, and responsible global citizens.',
+            'default' => 'MIS Bintaro fosters a close-knit, supportive community where students are empowered to lead, innovate, and excel in an international learning environment.',
             'type'    => 'textarea',
         ),
         'campus_image' => array(
             'label'   => 'Campus Image',
-            'default' => 'https://images.squarespace-cdn.com/content/v1/60c9a5215a821d628e0e1c65/1c0f3d35-d3ae-4cc5-9adc-18948a8b41a5/DSC08102.jpg',
+            'default' => 'https://images.squarespace-cdn.com/content/v1/60c9a5215a821d628e0e1c65/7d1ed6cb-ede3-4e77-b77a-1b433961e04e/11.jpg',
             'type'    => 'image',
         ),
         'campus_image_alt' => array(
             'label'   => 'Campus Image Alt',
-            'default' => 'Mentari Intercultural School Bintaro Campus',
+            'default' => 'MIS Bintaro Campus',
             'type'    => 'text',
         ),
         'cta_text' => array(
             'label'   => 'Button Text',
-            'default' => 'Explore Our Campus',
+            'default' => 'Visit MIS Bintaro',
             'type'    => 'text',
         ),
         'cta_url' => array(
             'label'   => 'Button URL',
-            'default' => '#',
+            'default' => home_url('/contact/'),
             'type'    => 'url',
         ),
     );
@@ -1073,30 +1073,21 @@ function mentari_preschool_sections()
             'title' => 'Hero',
             'fields' => array(
                 'hero_label' => array('text', 'Label kecil', 'Early Childhood'),
-                'hero_title' => array('text', 'Judul', 'Mentari Preschool'),
-                'hero_desc' => array('textarea', 'Deskripsi', 'Providing a warm, loving, and stimulating early learning environment where toddlers begin their lifelong educational journey.'),
-                'hero_badge' => array('text', 'Teks badge', 'Ages 1.5 - 4 Years'),
+                'hero_title' => array('text', 'Judul', 'Mentari Preschool Jakarta'),
+                'hero_desc' => array('textarea', 'Deskripsi', 'Bright, creative, and comforting environment for early childhood learners.'),
+                'hero_badge' => array('text', 'Teks badge', 'Est. 1994'),
             ),
         ),
         'content' => array(
             'title' => 'Program Overview',
             'fields' => array(
-                'content_title' => array('text', 'Judul', 'Play, Explore, and Grow Together'),
-                'content_lead' => array('textarea', 'Paragraf utama', 'At Mentari Preschool, we believe that early childhood education is the foundation for future social, emotional, and cognitive success.'),
-                'content_text' => array('textarea', 'Paragraf kedua', 'Our curriculum integrates play-based learning with sensory exploration, basic language development, and character building guided by experienced and caring educators.'),
-                'content_btn' => array('text', 'Teks tombol', 'Schedule a Tour'),
-                'content_image' => array('image', 'Gambar', $img . '1c0f3d35-d3ae-4cc5-9adc-18948a8b41a5/DSC08102.jpg'),
-                'content_image_alt' => array('text', 'Alt teks gambar', 'Mentari Preschool Classroom'),
-            ),
-        ),
-        'cta' => array(
-            'title' => 'Call to Action',
-            'fields' => array(
-                'cta_title' => array('text', 'Judul', 'Join the Mentari Preschool Family'),
-                'cta_desc' => array('textarea', 'Deskripsi', 'Take the first step in nurturing your child’s curiosity and confidence.'),
-                'cta_btn1' => array('text', 'Teks tombol 1', 'Apply Now'),
-                'cta_btn2' => array('text', 'Teks tombol 2', 'Contact Us'),
-                'cta_url' => array('url', 'URL tombol Schedule a Tour', home_url('/contact/')),
+                'content_title' => array('text', 'Judul', 'A Legacy of Quality Early Education'),
+                'content_lead' => array('textarea', 'Paragraf utama', 'Since 1994, Mentari Preschool has been nurturing the love for discovery in little children through play, arts, and foundational literacy.'),
+                'content_text' => array('textarea', 'Paragraf kedua', 'Our caring, skillful teachers create an environment where each child feels seen, loved, and encouraged to explore their unique creativity.'),
+                'content_btn' => array('text', 'Teks tombol', 'Preschool Admission'),
+                'content_image' => array('image', 'Gambar', $img . 'c3d7a938-2ffe-460e-92a4-6a785a41fdb2/L1030398.jpg'),
+                'content_image_alt' => array('text', 'Alt teks gambar', 'Mentari Preschool'),
+                'cta_url' => array('url', 'URL tombol Preschool Admission', home_url('/admission/')),
             ),
         ),
     );
@@ -1176,40 +1167,22 @@ function mentari_grand_surya_sections()
         'hero' => array(
             'title' => 'Hero',
             'fields' => array(
-                'hero_label' => array('text', 'Label kecil', 'Campus Profile'),
+                'hero_label' => array('text', 'Label kecil', 'Campus Location'),
                 'hero_title' => array('text', 'Judul', 'MIS Grand Surya'),
-                'hero_desc' => array('textarea', 'Deskripsi', 'Providing quality international standard education in West Jakarta, fostering a dynamic and caring learning community.'),
-                'hero_badge' => array('text', 'Teks badge', 'Kalideres, Jakarta Barat'),
+                'hero_desc' => array('textarea', 'Deskripsi', 'Perumahan Grand Surya, Pegadungan, Kalideres, Jakarta Barat'),
+                'hero_badge' => array('text', 'Teks badge', 'West Jakarta Campus'),
             ),
         ),
         'about' => array(
             'title' => 'Campus Overview',
             'fields' => array(
-                'about_title' => array('text', 'Judul', 'Excellence in West Jakarta'),
-                'about_lead' => array('textarea', 'Paragraf utama', 'MIS Grand Surya is committed to delivering a balanced curriculum that develops both intellectual rigor and strong moral values.'),
-                'about_text' => array('textarea', 'Paragraf kedua', 'Equipped with modern facilities, dedicated educators, and a safe environment, we empower students to achieve their highest potential from early years to secondary levels.'),
-                'about_btn' => array('text', 'Teks tombol', 'Schedule Campus Tour'),
-                'about_url' => array('url', 'URL tombol Schedule Campus Tour', home_url('/contact/')),
-                'about_image' => array('image', 'Gambar', $img . '5dece523-f2aa-4d83-bf13-34f01f47627f/DSC09182.jpg'),
+                'about_title' => array('text', 'Judul', 'Holistic Formation at Grand Surya'),
+                'about_lead' => array('textarea', 'Paragraf utama', 'Purpose-built modern campus providing exceptional international curriculum and holistic development programs in West Jakarta.'),
+                'about_text' => array('textarea', 'Paragraf kedua', 'Featuring smart classrooms, expansive outdoor sports facilities, creative arts and performance spaces, and dedicated STEM laboratories.'),
+                'about_btn' => array('text', 'Teks tombol', 'Contact Grand Surya'),
+                'about_url' => array('url', 'URL tombol Contact Grand Surya', home_url('/contact/')),
+                'about_image' => array('image', 'Gambar', $img . 'b9584050-a372-4b9f-95e7-2e57688e2f7f/DJI_0266.jpg'),
                 'about_image_alt' => array('text', 'Alt teks gambar', 'MIS Grand Surya Campus'),
-            ),
-        ),
-        'contact_info' => array(
-            'title' => 'Campus Details',
-            'fields' => array(
-                'address_title' => array('text', 'Judul Alamat', 'Grand Surya Address'),
-                'address_text' => array('textarea', 'Alamat Lengkap', 'Perumahan Grand Surya, Kalideres, Jakarta Barat'),
-                'phone_text' => array('text', 'Nomor Telepon', '+62 21 5437 2100'),
-                'email_text' => array('text', 'Email Kampus', 'misgs@mentarischool.com'),
-            ),
-        ),
-        'cta' => array(
-            'title' => 'Call to Action',
-            'fields' => array(
-                'cta_title' => array('text', 'Judul', 'Join MIS Grand Surya Today'),
-                'cta_desc' => array('textarea', 'Deskripsi', 'Discover our learning community and start your child’s journey with us.'),
-                'cta_btn1' => array('text', 'Teks tombol 1', 'Apply Now'),
-                'cta_btn2' => array('text', 'Teks tombol 2', 'Contact Admissions'),
             ),
         ),
     );
@@ -1297,22 +1270,13 @@ function mentari_sunflower_sections()
         'content' => array(
             'title' => 'Program Overview',
             'fields' => array(
-                'content_title' => array('text', 'Judul', 'Where Little Minds Blossom'),
-                'content_lead' => array('textarea', 'Paragraf utama', 'Sunflower Preschool offers a warm, engaging space where children can explore, play, and develop essential social and motor skills.'),
-                'content_text' => array('textarea', 'Paragraf kedua', 'Through a blend of guided play and structured learning, our dedicated educators help every child build confidence and a lifelong love for learning.'),
-                'content_btn' => array('text', 'Teks tombol', 'Schedule a Tour'),
-                'content_url' => array('url', 'URL tombol Schedule a Tour', home_url('/contact/')),
-                'content_image' => array('image', 'Gambar', $img . '1c0f3d35-d3ae-4cc5-9adc-18948a8b41a5/DSC08102.jpg'),
-                'content_image_alt' => array('text', 'Alt teks gambar', 'Sunflower Preschool Activities'),
-            ),
-        ),
-        'cta' => array(
-            'title' => 'Call to Action',
-            'fields' => array(
-                'cta_title' => array('text', 'Judul', 'Start Your Child’s Journey'),
-                'cta_desc' => array('textarea', 'Deskripsi', 'Get in touch with us to learn more about admissions and programs at Sunflower Preschool.'),
-                'cta_btn1' => array('text', 'Teks tombol 1', 'Apply Now'),
-                'cta_btn2' => array('text', 'Teks tombol 2', 'Contact Us'),
+                'content_title' => array('text', 'Judul', 'Joyful Discovery Every Day'),
+                'content_lead' => array('textarea', 'Paragraf utama', 'Sunflower Preschool provides a warm, stimulating, and family-like atmosphere where children thrive through sensory play and collaborative activities.'),
+                'content_text' => array('textarea', 'Paragraf kedua', 'Focusing on bilingual development, social skills, and creative exploration to build confident, joyful learners ready for elementary school.'),
+                'content_btn' => array('text', 'Teks tombol', 'Join Sunflower Family'),
+                'content_url' => array('url', 'URL tombol Join Sunflower Family', home_url('/admission/')),
+                'content_image' => array('image', 'Gambar', $img . '7bae7578-f323-4c61-952f-dc78f4ec141f/DSC01916-2.jpg'),
+                'content_image_alt' => array('text', 'Alt teks gambar', 'Sunflower Preschool'),
             ),
         ),
     );
