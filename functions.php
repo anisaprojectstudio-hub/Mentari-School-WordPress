@@ -99,7 +99,7 @@ function mentari_school_get_instagram_post_defaults()
             'comments' => 34,
         ),
         2 => array(
-            'image' => 'images/From the first day of school to the last, our students have shown incredible growth and dedication throughout the year. We are so proud of their achievements and can.jp',
+            'image' => 'images/From late nights and challenging lessons to moments of doubt and determination—today, we celebrate t_ggwp3.jpg',
             'alt' => 'Student Growth and Dedication',
             'type' => 'image',
             'likes' => 619,

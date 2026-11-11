@@ -899,10 +899,28 @@ get_header(); ?>
 
                     $post_id = 'mentari_instagram_post_' . $i;
                     $post_defaults = $instagram_post_defaults[$i];
+                    $default_image = get_theme_file_uri($post_defaults['image']);
 
-                    $image = get_theme_mod($post_id . '_image', get_theme_file_uri($post_defaults['image']));
+                    $image = get_theme_mod($post_id . '_image', $default_image);
+
+                    if ($i === 2) {
+                        $legacy_images = array(
+                            'images/From the first day of school to the last, our students have shown incredible growth and dedication throughout the year. We are so proud of their achievements and can.jp',
+                            'images/From the first day of school to the last, our students have shown incredible growth and dedication throughout the year. We are so proud of their achievements and can.jpg',
+                        );
+
+                        foreach ($legacy_images as $legacy_image) {
+                            if ($image === $legacy_image || $image === get_theme_file_uri($legacy_image)) {
+                                $image = $default_image;
+                                break;
+                            }
+                        }
+                    }
+
                     if (strpos($image, 'images/') === 0) {
-                        $image = get_theme_file_uri($image);
+                        $image = file_exists(get_theme_file_path($image))
+                            ? get_theme_file_uri($image)
+                            : $default_image;
                     }
                     $alt = get_theme_mod($post_id . '_alt', $post_defaults['alt']);
                     $type = get_theme_mod($post_id . '_type', $post_defaults['type']);
