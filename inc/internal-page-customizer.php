@@ -586,3 +586,99 @@ function mentari_hs_customize_register($wp_customize)
     }
 }
 add_action('customize_register', 'mentari_hs_customize_register');
+
+/*** Mentari School - University Counseling Page Customizer ***/
+
+/**
+ * Definisi semua field halaman University Counseling.
+ * Format: section => array(title, fields => array(key => array(type, label, default)))
+ * type: text | textarea | image
+ */
+function mentari_uc_sections()
+{
+    return array(
+        'hero' => array(
+            'title' => 'Hero',
+            'fields' => array(
+                'hero_label' => array('text', 'Label kecil', 'College Pathways'),
+                'hero_title' => array('text', 'Judul', 'University Counseling'),
+                'hero_desc' => array('textarea', 'Deskripsi', 'Empowering our graduates to gain acceptance into the world’s most prestigious universities.'),
+                'hero_badge' => array('text', 'Teks badge', 'Top 100 Global Unis'),
+            ),
+        ),
+        'main' => array(
+            'title' => 'Guidance Overview',
+            'fields' => array(
+                'main_title' => array('text', 'Judul', 'Personalized Higher Education Guidance'),
+                'main_lead' => array('textarea', 'Paragraf utama', 'Our dedicated University Counseling Office assists students individually from Grade 9 onward in goal-setting, portfolio building, and standardized test preparation.'),
+                'item1' => array('text', 'Poin 1', '1-on-1 college admissions advisory & career profiling'),
+                'item2' => array('text', 'Poin 2', 'Essay workshops, interview simulation & recommendation letters'),
+                'item3' => array('text', 'Poin 3 (kosongkan untuk menyembunyikan)', 'Annual MIS International University Fairs with 70+ global universities'),
+                'main_button' => array('text', 'Teks tombol (ke Contact)', 'Book a Counseling Session'),
+                'main_image' => array('image', 'Gambar', 'https://images.squarespace-cdn.com/content/v1/60c9a5215a821d628e0e1c65/8f65bfce-676a-43d1-a0f6-17db6974c471/Screenshot+2025-07-30+at+10.25.50.png'),
+            ),
+        ),
+    );
+}
+
+/** Ambil nilai satu field University Counseling (dari Customizer, atau default bila belum diubah). */
+function mentari_uc($key)
+{
+    static $defaults = null;
+    if (null === $defaults) {
+        $defaults = array();
+        foreach (mentari_uc_sections() as $section) {
+            foreach ($section['fields'] as $field_key => $field) {
+                $defaults[$field_key] = $field[2];
+            }
+        }
+    }
+    $default = isset($defaults[$key]) ? $defaults[$key] : '';
+    return get_theme_mod('mentari_uc_' . $key, $default);
+}
+
+function mentari_uc_customize_register($wp_customize)
+{
+    $wp_customize->add_panel('mentari_uc_panel', array(
+        'title' => __('University Counseling Page', 'mentari-school'),
+        'priority' => 104,
+    ));
+
+    $sanitizers = array(
+        'text' => 'sanitize_text_field',
+        'textarea' => 'sanitize_textarea_field',
+        'image' => 'esc_url_raw',
+    );
+
+    foreach (mentari_uc_sections() as $section_id => $section) {
+        $wp_customize->add_section('mentari_uc_' . $section_id, array(
+            'title' => $section['title'],
+            'panel' => 'mentari_uc_panel',
+        ));
+
+        foreach ($section['fields'] as $key => $field) {
+            list($type, $label, $default) = $field;
+            $setting_id = 'mentari_uc_' . $key;
+
+            $wp_customize->add_setting($setting_id, array(
+                'default' => $default,
+                'sanitize_callback' => $sanitizers[$type],
+                'transport' => 'refresh',
+            ));
+
+            if ('image' === $type) {
+                $wp_customize->add_control(new WP_Customize_Image_Control($wp_customize, $setting_id, array(
+                    'label' => $label,
+                    'section' => 'mentari_uc_' . $section_id,
+                )));
+            } else {
+                $wp_customize->add_control($setting_id, array(
+                    'label' => $label,
+                    'section' => 'mentari_uc_' . $section_id,
+                    'type' => $type,
+                ));
+            }
+        }
+    }
+}
+add_action('customize_register', 'mentari_uc_customize_register');
