@@ -153,7 +153,7 @@ function mentari_school_get_instagram_post_defaults()
 function mentari_school_customize_register($wp_customize)
 {
     $wp_customize->add_panel('mentari_homepage_panel', array(
-        'title' => __('Homepage', 'mentari-school'),
+        'title' => __('HOMEPAGE', 'mentari-school'),
         'priority' => 100,
     ));
 

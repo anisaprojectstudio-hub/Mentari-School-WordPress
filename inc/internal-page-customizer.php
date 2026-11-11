@@ -110,18 +110,32 @@ function mentari_internal_pages_config()
     return $pages;
 }
 
+function mentari_register_internal_page_panels($wp_customize)
+{
+    $panels = array(
+        'mentari_about_panel' => array('ABOUT', 110),
+        'mentari_program_panel' => array('PROGRAM', 120),
+        'mentari_campus_panel' => array('CAMPUS', 130),
+        'mentari_admission_panel' => array('ONLINE ADMISSION', 140),
+        'mentari_connect_panel' => array('CONNECT', 150),
+    );
+
+    foreach ($panels as $panel_id => $panel) {
+        $wp_customize->add_panel($panel_id, array(
+            'title' => __($panel[0], 'mentari-school'),
+            'priority' => $panel[1],
+        ));
+    }
+}
+add_action('customize_register', 'mentari_register_internal_page_panels', 5);
+
 function mentari_register_internal_pages_customizer($wp_customize)
 {
-    $panel_id = 'mentari_internal_admission_contact_panel';
-
-    $wp_customize->add_panel($panel_id, array(
-        'title' => __('Internal Pages - Admission & Contact', 'mentari-school'),
-        'priority' => 110,
-    ));
 
     foreach (mentari_internal_pages_config() as $slug => $page) {
         $page_id = str_replace('-', '_', $slug);
         $section_id = 'mentari_page_' . $page_id . '_section';
+        $panel_id = 'admission' === $slug ? 'mentari_admission_panel' : 'mentari_connect_panel';
 
         $wp_customize->add_section($section_id, array(
             'title' => $page['title'],
@@ -329,11 +343,6 @@ function mentari_story($key)
 
 function mentari_story_customize_register($wp_customize)
 {
-    $wp_customize->add_panel('mentari_story_panel', array(
-        'title' => __('MIS Story Page', 'mentari-school'),
-        'priority' => 101,
-    ));
-
     $sanitizers = array(
         'text' => 'sanitize_text_field',
         'textarea' => 'sanitize_textarea_field',
@@ -342,8 +351,8 @@ function mentari_story_customize_register($wp_customize)
 
     foreach (mentari_story_sections() as $section_id => $section) {
         $wp_customize->add_section('mentari_story_' . $section_id, array(
-            'title' => $section['title'],
-            'panel' => 'mentari_story_panel',
+            'title' => __('MIS Story', 'mentari-school') . ' — ' . $section['title'],
+            'panel' => 'mentari_about_panel',
         ));
 
         foreach ($section['fields'] as $key => $field) {
@@ -416,11 +425,6 @@ function mentari_early_years($key)
 
 function mentari_early_years_customize_register($wp_customize)
 {
-    $wp_customize->add_panel('mentari_early_years_panel', array(
-        'title' => __('Early Years Page', 'mentari-school'),
-        'priority' => 102,
-    ));
-
     $sanitizers = array(
         'text' => 'sanitize_text_field',
         'textarea' => 'sanitize_textarea_field',
@@ -429,8 +433,8 @@ function mentari_early_years_customize_register($wp_customize)
 
     foreach (mentari_early_years_sections() as $section_id => $section) {
         $wp_customize->add_section('mentari_early_years_' . $section_id, array(
-            'title' => $section['title'],
-            'panel' => 'mentari_early_years_panel',
+            'title' => __('Early Years (Ages 2-5)', 'mentari-school') . ' — ' . $section['title'],
+            'panel' => 'mentari_program_panel',
         ));
 
         foreach ($section['fields'] as $key => $field) {
@@ -517,11 +521,6 @@ function mentari_pe($key)
 
 function mentari_pe_customize_register($wp_customize)
 {
-    $wp_customize->add_panel('mentari_pe_panel', array(
-        'title' => __('Positive Education Page', 'mentari-school'),
-        'priority' => 102,
-    ));
-
     $sanitizers = array(
         'text' => 'sanitize_text_field',
         'textarea' => 'sanitize_textarea_field',
@@ -530,8 +529,8 @@ function mentari_pe_customize_register($wp_customize)
 
     foreach (mentari_pe_sections() as $section_id => $section) {
         $wp_customize->add_section('mentari_pe_' . $section_id, array(
-            'title' => $section['title'],
-            'panel' => 'mentari_pe_panel',
+            'title' => __('Positive Education at MIS', 'mentari-school') . ' — ' . $section['title'],
+            'panel' => 'mentari_about_panel',
         ));
 
         foreach ($section['fields'] as $key => $field) {
@@ -611,11 +610,6 @@ function mentari_hs($key)
 
 function mentari_hs_customize_register($wp_customize)
 {
-    $wp_customize->add_panel('mentari_hs_panel', array(
-        'title' => __('High School Page', 'mentari-school'),
-        'priority' => 103,
-    ));
-
     $sanitizers = array(
         'text' => 'sanitize_text_field',
         'textarea' => 'sanitize_textarea_field',
@@ -624,8 +618,8 @@ function mentari_hs_customize_register($wp_customize)
 
     foreach (mentari_hs_sections() as $section_id => $section) {
         $wp_customize->add_section('mentari_hs_' . $section_id, array(
-            'title' => $section['title'],
-            'panel' => 'mentari_hs_panel',
+            'title' => __('High School (DP/IGCSE)', 'mentari-school') . ' — ' . $section['title'],
+            'panel' => 'mentari_program_panel',
         ));
 
         foreach ($section['fields'] as $key => $field) {
@@ -707,11 +701,6 @@ function mentari_uc($key)
 
 function mentari_uc_customize_register($wp_customize)
 {
-    $wp_customize->add_panel('mentari_uc_panel', array(
-        'title' => __('University Counseling Page', 'mentari-school'),
-        'priority' => 104,
-    ));
-
     $sanitizers = array(
         'text' => 'sanitize_text_field',
         'textarea' => 'sanitize_textarea_field',
@@ -720,8 +709,8 @@ function mentari_uc_customize_register($wp_customize)
 
     foreach (mentari_uc_sections() as $section_id => $section) {
         $wp_customize->add_section('mentari_uc_' . $section_id, array(
-            'title' => $section['title'],
-            'panel' => 'mentari_uc_panel',
+            'title' => __('University Counseling', 'mentari-school') . ' — ' . $section['title'],
+            'panel' => 'mentari_program_panel',
         ));
 
         foreach ($section['fields'] as $key => $field) {
@@ -907,7 +896,8 @@ function mentari_bintaro_customizer($wp_customize)
     $section_id = 'mentari_bintaro_section';
 
     $wp_customize->add_section($section_id, array(
-        'title'       => 'MIS Bintaro Campus',
+        'title'       => __('MIS Bintaro', 'mentari-school'),
+        'panel'       => 'mentari_campus_panel',
         'priority'    => 36,
         'description' => 'Edit content halaman MIS Bintaro Campus.',
     ));
@@ -985,7 +975,8 @@ function mentari_bintaro_content($field)
 function mentari_jakarta_customizer($wp_customize)
 {
     $wp_customize->add_section('mentari_jakarta_section', array(
-        'title'       => 'MIS Jakarta Campus',
+        'title'       => __('MIS Jakarta (Cipete)', 'mentari-school'),
+        'panel'       => 'mentari_campus_panel',
         'priority'    => 35,
         'description' => 'Edit content halaman MIS Jakarta Campus.',
     ));
@@ -1111,11 +1102,6 @@ function mentari_preschool($key)
 
 function mentari_preschool_customize_register($wp_customize)
 {
-    $wp_customize->add_panel('mentari_preschool_panel', array(
-        'title' => __('Mentari Preschool Page', 'mentari-school'),
-        'priority' => 103,
-    ));
-
     $sanitizers = array(
         'text' => 'sanitize_text_field',
         'textarea' => 'sanitize_textarea_field',
@@ -1125,8 +1111,8 @@ function mentari_preschool_customize_register($wp_customize)
 
     foreach (mentari_preschool_sections() as $section_id => $section) {
         $wp_customize->add_section('mentari_preschool_' . $section_id, array(
-            'title' => $section['title'],
-            'panel' => 'mentari_preschool_panel',
+            'title' => __('Mentari Preschool Jakarta', 'mentari-school') . ' — ' . $section['title'],
+            'panel' => 'mentari_campus_panel',
         ));
 
         foreach ($section['fields'] as $key => $field) {
@@ -1206,11 +1192,6 @@ function mentari_grand_surya($key)
 
 function mentari_grand_surya_customize_register($wp_customize)
 {
-    $wp_customize->add_panel('mentari_grand_surya_panel', array(
-        'title' => __('MIS Grand Surya Page', 'mentari-school'),
-        'priority' => 104,
-    ));
-
     $sanitizers = array(
         'text' => 'sanitize_text_field',
         'textarea' => 'sanitize_textarea_field',
@@ -1220,8 +1201,8 @@ function mentari_grand_surya_customize_register($wp_customize)
 
     foreach (mentari_grand_surya_sections() as $section_id => $section) {
         $wp_customize->add_section('mentari_grand_surya_' . $section_id, array(
-            'title' => $section['title'],
-            'panel' => 'mentari_grand_surya_panel',
+            'title' => __('MIS Grand Surya', 'mentari-school') . ' — ' . $section['title'],
+            'panel' => 'mentari_campus_panel',
         ));
 
         foreach ($section['fields'] as $key => $field) {
@@ -1300,11 +1281,6 @@ function mentari_sunflower($key)
 
 function mentari_sunflower_customize_register($wp_customize)
 {
-    $wp_customize->add_panel('mentari_sunflower_panel', array(
-        'title' => __('Sunflower Preschool Page', 'mentari-school'),
-        'priority' => 105,
-    ));
-
     $sanitizers = array(
         'text' => 'sanitize_text_field',
         'textarea' => 'sanitize_textarea_field',
@@ -1314,8 +1290,8 @@ function mentari_sunflower_customize_register($wp_customize)
 
     foreach (mentari_sunflower_sections() as $section_id => $section) {
         $wp_customize->add_section('mentari_sunflower_' . $section_id, array(
-            'title' => $section['title'],
-            'panel' => 'mentari_sunflower_panel',
+            'title' => __('Sunflower Preschool', 'mentari-school') . ' — ' . $section['title'],
+            'panel' => 'mentari_campus_panel',
         ));
 
         foreach ($section['fields'] as $key => $field) {
@@ -1388,11 +1364,6 @@ function mentari_elementary($key)
 
 function mentari_elementary_customize_register($wp_customize)
 {
-    $wp_customize->add_panel('mentari_elementary_panel', array(
-        'title' => __('Elementary Page', 'mentari-school'),
-        'priority' => 103,
-    ));
-
     $sanitizers = array(
         'text' => 'sanitize_text_field',
         'textarea' => 'sanitize_textarea_field',
@@ -1401,8 +1372,8 @@ function mentari_elementary_customize_register($wp_customize)
 
     foreach (mentari_elementary_sections() as $section_id => $section) {
         $wp_customize->add_section('mentari_elementary_' . $section_id, array(
-            'title' => $section['title'],
-            'panel' => 'mentari_elementary_panel',
+            'title' => __('Elementary (PYP)', 'mentari-school') . ' — ' . $section['title'],
+            'panel' => 'mentari_program_panel',
         ));
 
         foreach ($section['fields'] as $key => $field) {
@@ -1475,11 +1446,6 @@ function mentari_middle_school($key)
 
 function mentari_middle_school_customize_register($wp_customize)
 {
-    $wp_customize->add_panel('mentari_middle_school_panel', array(
-        'title' => __('Middle School Page', 'mentari-school'),
-        'priority' => 104,
-    ));
-
     $sanitizers = array(
         'text' => 'sanitize_text_field',
         'textarea' => 'sanitize_textarea_field',
@@ -1488,8 +1454,8 @@ function mentari_middle_school_customize_register($wp_customize)
 
     foreach (mentari_middle_school_sections() as $section_id => $section) {
         $wp_customize->add_section('mentari_middle_school_' . $section_id, array(
-            'title' => $section['title'],
-            'panel' => 'mentari_middle_school_panel',
+            'title' => __('Middle School (MYP)', 'mentari-school') . ' — ' . $section['title'],
+            'panel' => 'mentari_program_panel',
         ));
 
         foreach ($section['fields'] as $key => $field) {
