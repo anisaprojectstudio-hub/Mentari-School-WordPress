@@ -492,3 +492,97 @@ function mentari_pe_customize_register($wp_customize)
     }
 }
 add_action('customize_register', 'mentari_pe_customize_register');
+
+/*** Mentari School - High School Page Customizer ***/
+
+/**
+ * Definisi semua field halaman High School.
+ * Format: section => array(title, fields => array(key => array(type, label, default)))
+ * type: text | textarea | image
+ */
+function mentari_hs_sections()
+{
+    return array(
+        'hero' => array(
+            'title' => 'Hero',
+            'fields' => array(
+                'hero_label' => array('text', 'Label kecil', 'Diploma Pathway'),
+                'hero_title' => array('text', 'Judul', 'Senior High School'),
+                'hero_desc' => array('textarea', 'Deskripsi', 'Cambridge IGCSE & IB Diploma Programme (DP) — The premier gateway to world-renowned universities.'),
+                'hero_badge' => array('text', 'Teks badge', 'Grades 9 - 12'),
+            ),
+        ),
+        'main' => array(
+            'title' => 'Program Overview',
+            'fields' => array(
+                'main_title' => array('text', 'Judul', 'Excellence in IB Diploma & IGCSE'),
+                'main_lead' => array('textarea', 'Paragraf utama', 'MIS High School students consistently achieve world-class scores in the IB Diploma examinations, with average scores well above global averages.'),
+                'main_text' => array('textarea', 'Paragraf kedua', 'Our curriculum emphasizes rigorous academics, Creativity, Activity, Service (CAS), Theory of Knowledge (TOK), and a 4,000-word Extended Essay that thoroughly prepares students for university-level research.'),
+                'main_button' => array('text', 'Teks tombol (ke Admission)', 'Apply for High School'),
+                'main_image' => array('image', 'Gambar', 'https://images.squarespace-cdn.com/content/v1/60c9a5215a821d628e0e1c65/1576ef94-cf1a-4ef4-86e4-2411b5967bb8/High+School+2.jpg'),
+            ),
+        ),
+    );
+}
+
+/** Ambil nilai satu field High School (dari Customizer, atau default bila belum diubah). */
+function mentari_hs($key)
+{
+    static $defaults = null;
+    if (null === $defaults) {
+        $defaults = array();
+        foreach (mentari_hs_sections() as $section) {
+            foreach ($section['fields'] as $field_key => $field) {
+                $defaults[$field_key] = $field[2];
+            }
+        }
+    }
+    $default = isset($defaults[$key]) ? $defaults[$key] : '';
+    return get_theme_mod('mentari_hs_' . $key, $default);
+}
+
+function mentari_hs_customize_register($wp_customize)
+{
+    $wp_customize->add_panel('mentari_hs_panel', array(
+        'title' => __('High School Page', 'mentari-school'),
+        'priority' => 103,
+    ));
+
+    $sanitizers = array(
+        'text' => 'sanitize_text_field',
+        'textarea' => 'sanitize_textarea_field',
+        'image' => 'esc_url_raw',
+    );
+
+    foreach (mentari_hs_sections() as $section_id => $section) {
+        $wp_customize->add_section('mentari_hs_' . $section_id, array(
+            'title' => $section['title'],
+            'panel' => 'mentari_hs_panel',
+        ));
+
+        foreach ($section['fields'] as $key => $field) {
+            list($type, $label, $default) = $field;
+            $setting_id = 'mentari_hs_' . $key;
+
+            $wp_customize->add_setting($setting_id, array(
+                'default' => $default,
+                'sanitize_callback' => $sanitizers[$type],
+                'transport' => 'refresh',
+            ));
+
+            if ('image' === $type) {
+                $wp_customize->add_control(new WP_Customize_Image_Control($wp_customize, $setting_id, array(
+                    'label' => $label,
+                    'section' => 'mentari_hs_' . $section_id,
+                )));
+            } else {
+                $wp_customize->add_control($setting_id, array(
+                    'label' => $label,
+                    'section' => 'mentari_hs_' . $section_id,
+                    'type' => $type,
+                ));
+            }
+        }
+    }
+}
+add_action('customize_register', 'mentari_hs_customize_register');
