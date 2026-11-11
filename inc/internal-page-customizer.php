@@ -169,6 +169,66 @@ function mentari_page_content($slug, $field_id)
         return mentari_bintaro_content($field_id);
     }
 
+    if ('mentari-preschool' === $slug) {
+        $preschool_fields = array(
+            'hero_label' => 'hero_label',
+            'hero_title' => 'hero_title',
+            'hero_description' => 'hero_desc',
+            'hero_badge' => 'hero_badge',
+            'campus_title' => 'content_title',
+            'campus_paragraph_1' => 'content_lead',
+            'campus_paragraph_2' => 'content_text',
+            'cta_url' => 'cta_url',
+            'cta_text' => 'content_btn',
+            'campus_image' => 'content_image',
+            'campus_image_alt' => 'content_image_alt',
+        );
+
+        if (isset($preschool_fields[$field_id])) {
+            return mentari_preschool($preschool_fields[$field_id]);
+        }
+    }
+
+    if ('mis-grand-surya' === $slug) {
+        $grand_surya_fields = array(
+            'hero_label' => 'hero_label',
+            'hero_title' => 'hero_title',
+            'hero_description' => 'hero_desc',
+            'hero_badge' => 'hero_badge',
+            'campus_title' => 'about_title',
+            'campus_paragraph_1' => 'about_lead',
+            'campus_paragraph_2' => 'about_text',
+            'cta_url' => 'about_url',
+            'cta_text' => 'about_btn',
+            'campus_image' => 'about_image',
+            'campus_image_alt' => 'about_image_alt',
+        );
+
+        if (isset($grand_surya_fields[$field_id])) {
+            return mentari_grand_surya($grand_surya_fields[$field_id]);
+        }
+    }
+
+    if ('sunflower-preschool' === $slug) {
+        $sunflower_fields = array(
+            'hero_label' => 'hero_label',
+            'hero_title' => 'hero_title',
+            'hero_description' => 'hero_desc',
+            'hero_badge' => 'hero_badge',
+            'campus_title' => 'content_title',
+            'campus_paragraph_1' => 'content_lead',
+            'campus_paragraph_2' => 'content_text',
+            'cta_url' => 'content_url',
+            'cta_text' => 'content_btn',
+            'campus_image' => 'content_image',
+            'campus_image_alt' => 'content_image_alt',
+        );
+
+        if (isset($sunflower_fields[$field_id])) {
+            return mentari_sunflower($sunflower_fields[$field_id]);
+        }
+    }
+
     $pages = mentari_internal_pages_config();
 
     if (!isset($pages[$slug]['fields'][$field_id])) {
@@ -1001,3 +1061,322 @@ function mentari_jakarta_content($field)
         $fields[$field]['default']
     );
 }
+
+/*** Mentari School - Mentari Preschool Page Customizer ***/
+
+function mentari_preschool_sections()
+{
+    $img = 'https://images.squarespace-cdn.com/content/v1/60c9a5215a821d628e0e1c65/';
+
+    return array(
+        'hero' => array(
+            'title' => 'Hero',
+            'fields' => array(
+                'hero_label' => array('text', 'Label kecil', 'Early Childhood'),
+                'hero_title' => array('text', 'Judul', 'Mentari Preschool'),
+                'hero_desc' => array('textarea', 'Deskripsi', 'Providing a warm, loving, and stimulating early learning environment where toddlers begin their lifelong educational journey.'),
+                'hero_badge' => array('text', 'Teks badge', 'Ages 1.5 - 4 Years'),
+            ),
+        ),
+        'content' => array(
+            'title' => 'Program Overview',
+            'fields' => array(
+                'content_title' => array('text', 'Judul', 'Play, Explore, and Grow Together'),
+                'content_lead' => array('textarea', 'Paragraf utama', 'At Mentari Preschool, we believe that early childhood education is the foundation for future social, emotional, and cognitive success.'),
+                'content_text' => array('textarea', 'Paragraf kedua', 'Our curriculum integrates play-based learning with sensory exploration, basic language development, and character building guided by experienced and caring educators.'),
+                'content_btn' => array('text', 'Teks tombol', 'Schedule a Tour'),
+                'content_image' => array('image', 'Gambar', $img . '1c0f3d35-d3ae-4cc5-9adc-18948a8b41a5/DSC08102.jpg'),
+                'content_image_alt' => array('text', 'Alt teks gambar', 'Mentari Preschool Classroom'),
+            ),
+        ),
+        'cta' => array(
+            'title' => 'Call to Action',
+            'fields' => array(
+                'cta_title' => array('text', 'Judul', 'Join the Mentari Preschool Family'),
+                'cta_desc' => array('textarea', 'Deskripsi', 'Take the first step in nurturing your child’s curiosity and confidence.'),
+                'cta_btn1' => array('text', 'Teks tombol 1', 'Apply Now'),
+                'cta_btn2' => array('text', 'Teks tombol 2', 'Contact Us'),
+                'cta_url' => array('url', 'URL tombol Schedule a Tour', home_url('/contact/')),
+            ),
+        ),
+    );
+}
+
+/** Ambil nilai satu field Mentari Preschool (dari Customizer, atau default bila belum diubah). */
+function mentari_preschool($key)
+{
+    static $defaults = null;
+    if (null === $defaults) {
+        $defaults = array();
+        foreach (mentari_preschool_sections() as $section) {
+            foreach ($section['fields'] as $field_key => $field) {
+                $defaults[$field_key] = $field[2];
+            }
+        }
+    }
+    $default = isset($defaults[$key]) ? $defaults[$key] : '';
+    return get_theme_mod('mentari_preschool_' . $key, $default);
+}
+
+function mentari_preschool_customize_register($wp_customize)
+{
+    $wp_customize->add_panel('mentari_preschool_panel', array(
+        'title' => __('Mentari Preschool Page', 'mentari-school'),
+        'priority' => 103,
+    ));
+
+    $sanitizers = array(
+        'text' => 'sanitize_text_field',
+        'textarea' => 'sanitize_textarea_field',
+        'image' => 'esc_url_raw',
+        'url' => 'esc_url_raw',
+    );
+
+    foreach (mentari_preschool_sections() as $section_id => $section) {
+        $wp_customize->add_section('mentari_preschool_' . $section_id, array(
+            'title' => $section['title'],
+            'panel' => 'mentari_preschool_panel',
+        ));
+
+        foreach ($section['fields'] as $key => $field) {
+            list($type, $label, $default) = $field;
+            $setting_id = 'mentari_preschool_' . $key;
+
+            $wp_customize->add_setting($setting_id, array(
+                'default' => $default,
+                'sanitize_callback' => $sanitizers[$type],
+                'transport' => 'refresh',
+            ));
+
+            if ('image' === $type) {
+                $wp_customize->add_control(new WP_Customize_Image_Control($wp_customize, $setting_id, array(
+                    'label' => $label,
+                    'section' => 'mentari_preschool_' . $section_id,
+                )));
+            } else {
+                $wp_customize->add_control($setting_id, array(
+                    'label' => $label,
+                    'section' => 'mentari_preschool_' . $section_id,
+                    'type' => $type,
+                ));
+            }
+        }
+    }
+}
+add_action('customize_register', 'mentari_preschool_customize_register');
+
+
+/*** Mentari School - MIS Grand Surya Page Customizer ***/
+
+function mentari_grand_surya_sections()
+{
+    $img = 'https://images.squarespace-cdn.com/content/v1/60c9a5215a821d628e0e1c65/';
+
+    return array(
+        'hero' => array(
+            'title' => 'Hero',
+            'fields' => array(
+                'hero_label' => array('text', 'Label kecil', 'Campus Profile'),
+                'hero_title' => array('text', 'Judul', 'MIS Grand Surya'),
+                'hero_desc' => array('textarea', 'Deskripsi', 'Providing quality international standard education in West Jakarta, fostering a dynamic and caring learning community.'),
+                'hero_badge' => array('text', 'Teks badge', 'Kalideres, Jakarta Barat'),
+            ),
+        ),
+        'about' => array(
+            'title' => 'Campus Overview',
+            'fields' => array(
+                'about_title' => array('text', 'Judul', 'Excellence in West Jakarta'),
+                'about_lead' => array('textarea', 'Paragraf utama', 'MIS Grand Surya is committed to delivering a balanced curriculum that develops both intellectual rigor and strong moral values.'),
+                'about_text' => array('textarea', 'Paragraf kedua', 'Equipped with modern facilities, dedicated educators, and a safe environment, we empower students to achieve their highest potential from early years to secondary levels.'),
+                'about_btn' => array('text', 'Teks tombol', 'Schedule Campus Tour'),
+                'about_url' => array('url', 'URL tombol Schedule Campus Tour', home_url('/contact/')),
+                'about_image' => array('image', 'Gambar', $img . '5dece523-f2aa-4d83-bf13-34f01f47627f/DSC09182.jpg'),
+                'about_image_alt' => array('text', 'Alt teks gambar', 'MIS Grand Surya Campus'),
+            ),
+        ),
+        'contact_info' => array(
+            'title' => 'Campus Details',
+            'fields' => array(
+                'address_title' => array('text', 'Judul Alamat', 'Grand Surya Address'),
+                'address_text' => array('textarea', 'Alamat Lengkap', 'Perumahan Grand Surya, Kalideres, Jakarta Barat'),
+                'phone_text' => array('text', 'Nomor Telepon', '+62 21 5437 2100'),
+                'email_text' => array('text', 'Email Kampus', 'misgs@mentarischool.com'),
+            ),
+        ),
+        'cta' => array(
+            'title' => 'Call to Action',
+            'fields' => array(
+                'cta_title' => array('text', 'Judul', 'Join MIS Grand Surya Today'),
+                'cta_desc' => array('textarea', 'Deskripsi', 'Discover our learning community and start your child’s journey with us.'),
+                'cta_btn1' => array('text', 'Teks tombol 1', 'Apply Now'),
+                'cta_btn2' => array('text', 'Teks tombol 2', 'Contact Admissions'),
+            ),
+        ),
+    );
+}
+
+/** Ambil nilai satu field MIS Grand Surya (dari Customizer, atau default bila belum diubah). */
+function mentari_grand_surya($key)
+{
+    static $defaults = null;
+    if (null === $defaults) {
+        $defaults = array();
+        foreach (mentari_grand_surya_sections() as $section) {
+            foreach ($section['fields'] as $field_key => $field) {
+                $defaults[$field_key] = $field[2];
+            }
+        }
+    }
+    $default = isset($defaults[$key]) ? $defaults[$key] : '';
+    return get_theme_mod('mentari_grand_surya_' . $key, $default);
+}
+
+function mentari_grand_surya_customize_register($wp_customize)
+{
+    $wp_customize->add_panel('mentari_grand_surya_panel', array(
+        'title' => __('MIS Grand Surya Page', 'mentari-school'),
+        'priority' => 104,
+    ));
+
+    $sanitizers = array(
+        'text' => 'sanitize_text_field',
+        'textarea' => 'sanitize_textarea_field',
+        'image' => 'esc_url_raw',
+        'url' => 'esc_url_raw',
+    );
+
+    foreach (mentari_grand_surya_sections() as $section_id => $section) {
+        $wp_customize->add_section('mentari_grand_surya_' . $section_id, array(
+            'title' => $section['title'],
+            'panel' => 'mentari_grand_surya_panel',
+        ));
+
+        foreach ($section['fields'] as $key => $field) {
+            list($type, $label, $default) = $field;
+            $setting_id = 'mentari_grand_surya_' . $key;
+
+            $wp_customize->add_setting($setting_id, array(
+                'default' => $default,
+                'sanitize_callback' => $sanitizers[$type],
+                'transport' => 'refresh',
+            ));
+
+            if ('image' === $type) {
+                $wp_customize->add_control(new WP_Customize_Image_Control($wp_customize, $setting_id, array(
+                    'label' => $label,
+                    'section' => 'mentari_grand_surya_' . $section_id,
+                )));
+            } else {
+                $wp_customize->add_control($setting_id, array(
+                    'label' => $label,
+                    'section' => 'mentari_grand_surya_' . $section_id,
+                    'type' => $type,
+                ));
+            }
+        }
+    }
+}
+add_action('customize_register', 'mentari_grand_surya_customize_register');
+
+/*** Mentari School - Sunflower Preschool Page Customizer ***/
+
+function mentari_sunflower_sections()
+{
+    $img = 'https://images.squarespace-cdn.com/content/v1/60c9a5215a821d628e0e1c65/';
+
+    return array(
+        'hero' => array(
+            'title' => 'Hero',
+            'fields' => array(
+                'hero_label' => array('text', 'Label kecil', 'Early Childhood'),
+                'hero_title' => array('text', 'Judul', 'Sunflower Preschool'),
+                'hero_desc' => array('textarea', 'Deskripsi', 'A nurturing and joyful environment designed to spark curiosity, creativity, and foundational learning for young children.'),
+                'hero_badge' => array('text', 'Teks badge', 'Early Years Program'),
+            ),
+        ),
+        'content' => array(
+            'title' => 'Program Overview',
+            'fields' => array(
+                'content_title' => array('text', 'Judul', 'Where Little Minds Blossom'),
+                'content_lead' => array('textarea', 'Paragraf utama', 'Sunflower Preschool offers a warm, engaging space where children can explore, play, and develop essential social and motor skills.'),
+                'content_text' => array('textarea', 'Paragraf kedua', 'Through a blend of guided play and structured learning, our dedicated educators help every child build confidence and a lifelong love for learning.'),
+                'content_btn' => array('text', 'Teks tombol', 'Schedule a Tour'),
+                'content_url' => array('url', 'URL tombol Schedule a Tour', home_url('/contact/')),
+                'content_image' => array('image', 'Gambar', $img . '1c0f3d35-d3ae-4cc5-9adc-18948a8b41a5/DSC08102.jpg'),
+                'content_image_alt' => array('text', 'Alt teks gambar', 'Sunflower Preschool Activities'),
+            ),
+        ),
+        'cta' => array(
+            'title' => 'Call to Action',
+            'fields' => array(
+                'cta_title' => array('text', 'Judul', 'Start Your Child’s Journey'),
+                'cta_desc' => array('textarea', 'Deskripsi', 'Get in touch with us to learn more about admissions and programs at Sunflower Preschool.'),
+                'cta_btn1' => array('text', 'Teks tombol 1', 'Apply Now'),
+                'cta_btn2' => array('text', 'Teks tombol 2', 'Contact Us'),
+            ),
+        ),
+    );
+}
+
+/** Ambil nilai satu field Sunflower Preschool (dari Customizer, atau default bila belum diubah). */
+function mentari_sunflower($key)
+{
+    static $defaults = null;
+    if (null === $defaults) {
+        $defaults = array();
+        foreach (mentari_sunflower_sections() as $section) {
+            foreach ($section['fields'] as $field_key => $field) {
+                $defaults[$field_key] = $field[2];
+            }
+        }
+    }
+    $default = isset($defaults[$key]) ? $defaults[$key] : '';
+    return get_theme_mod('mentari_sunflower_' . $key, $default);
+}
+
+function mentari_sunflower_customize_register($wp_customize)
+{
+    $wp_customize->add_panel('mentari_sunflower_panel', array(
+        'title' => __('Sunflower Preschool Page', 'mentari-school'),
+        'priority' => 105,
+    ));
+
+    $sanitizers = array(
+        'text' => 'sanitize_text_field',
+        'textarea' => 'sanitize_textarea_field',
+        'image' => 'esc_url_raw',
+        'url' => 'esc_url_raw',
+    );
+
+    foreach (mentari_sunflower_sections() as $section_id => $section) {
+        $wp_customize->add_section('mentari_sunflower_' . $section_id, array(
+            'title' => $section['title'],
+            'panel' => 'mentari_sunflower_panel',
+        ));
+
+        foreach ($section['fields'] as $key => $field) {
+            list($type, $label, $default) = $field;
+            $setting_id = 'mentari_sunflower_' . $key;
+
+            $wp_customize->add_setting($setting_id, array(
+                'default' => $default,
+                'sanitize_callback' => $sanitizers[$type],
+                'transport' => 'refresh',
+            ));
+
+            if ('image' === $type) {
+                $wp_customize->add_control(new WP_Customize_Image_Control($wp_customize, $setting_id, array(
+                    'label' => $label,
+                    'section' => 'mentari_sunflower_' . $section_id,
+                )));
+            } else {
+                $wp_customize->add_control($setting_id, array(
+                    'label' => $label,
+                    'section' => 'mentari_sunflower_' . $section_id,
+                    'type' => $type,
+                ));
+            }
+        }
+    }
+}
+add_action('customize_register', 'mentari_sunflower_customize_register');
