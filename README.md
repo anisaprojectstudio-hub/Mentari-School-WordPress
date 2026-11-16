@@ -106,7 +106,9 @@ Hero Banner**. HOMEPAGE memiliki panel sendiri dan section-section homepage.
 - Pendaftaran panel, section, setting, kontrol, dan konfigurasi halaman internal
   berada di [`inc/internal-page-customizer.php`](./inc/internal-page-customizer.php).
 - Pengaturan homepage dan beberapa komponen homepage berada di
-  [`functions.php`](./functions.php).
+  [`inc/homepage-customizer.php`](./inc/homepage-customizer.php).
+- [`functions.php`](./functions.php) memuat modul-modul backend dari folder `inc/`,
+  termasuk aset, navigasi, SEO, setup halaman, dan handler formulir.
 - Template halaman mengambil nilai pengaturan melalui helper seperti
   `mentari_story()`, `mentari_early_years()`, `mentari_page_content()`, dan helper
   halaman lainnya.
