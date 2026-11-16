@@ -44,7 +44,7 @@ function mentari_school_enqueue_assets()
         'mentari-main-js',
         $theme_uri . '/scripts/main.js',
         array('mentari-vendor-js'),
-        '1.0.0',
+        filemtime(get_template_directory() . '/scripts/main.js'),
         true
     );
 }

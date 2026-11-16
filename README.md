@@ -9,6 +9,7 @@ template.
 - [Persyaratan](#persyaratan)
 - [Instalasi lokal dengan LocalWP](#instalasi-lokal-dengan-localwp)
 - [Backend](#backend)
+- [Alur formulir admission dan contact](#alur-formulir-admission-dan-contact)
 - [Mengedit konten melalui Customizer](#mengedit-konten-melalui-customizer)
 - [Struktur panel dan halaman](#struktur-panel-dan-halaman)
 - [Cara kerja pengaturan konten](#cara-kerja-pengaturan-konten)
@@ -42,11 +43,31 @@ situs dan database untuk menyimpan konten serta pengaturan. Konten yang
 dikonfigurasi melalui Customizer tema ini disimpan sebagai `theme_mod` di
 database WordPress dan dibaca oleh template tema untuk ditampilkan pada halaman.
 
-Untuk kebutuhan saat ini, pengelolaan konten yang dijelaskan dalam README
-dilakukan melalui **Appearance/Tampilan → Customize/Sesuaikan**. Fitur backend
-lain, seperti penyimpanan data formulir pendaftaran atau integrasi API, perlu
-ditambahkan dan dikonfigurasi secara terpisah—misalnya melalui plugin atau
-kustomisasi WordPress.
+Pengelolaan konten dilakukan melalui **Appearance/Tampilan →
+Customize/Sesuaikan**. Formulir Online Admission dan Contact juga memiliki
+handler WordPress yang mengirimkan pengajuan melalui email; perilaku dan
+persyaratan produksinya dijelaskan pada bagian berikutnya. Pengajuan formulir
+tidak disimpan sebagai entri di database oleh tema ini.
+
+## Alur formulir admission dan contact
+
+Template WordPress mengirim formulir ke endpoint `admin-ajax.php`. Handler tema
+memeriksa nonce dan isian, mengabaikan kiriman yang mengisi honeypot, lalu
+mengirim rincian pengajuan dengan `wp_mail()`. Penerima default adalah alamat
+**Administration Email Address** pada **Settings → General** WordPress.
+Penerima dapat diubah melalui filter `mentari_form_recipient`. Formulir admission
+mewajibkan nama orang tua/wali, email valid, nomor telepon, kampus, dan jenjang;
+nama siswa dan pesan bersifat opsional.
+
+Sebelum produksi, pastikan alamat penerima benar dan layanan email situs sudah
+dikonfigurasi (misalnya melalui SMTP atau provider email yang digunakan situs).
+Lakukan uji pengiriman dari situs produksi dan periksa inbox serta spam. Respons
+sukses berarti `wp_mail()` menerima pengiriman, bukan jaminan email sudah masuk
+ke inbox. Kegagalan pengiriman ditampilkan sebagai error agar pengguna dapat
+mencoba kembali atau menghubungi sekolah secara langsung.
+
+File HTML di `doc/` adalah mockup statis untuk referensi tampilan, bukan halaman
+produksi dan tidak terhubung ke handler WordPress.
 
 ## Mengedit konten melalui Customizer
 
